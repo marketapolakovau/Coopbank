@@ -1,14 +1,17 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./components/Home";
-import { UserProvider } from "./UserProvider";
+
+import Calculator from './components/Calculator'
+
 
 function App() {
   return (
     <div className="App">
-      <UserProvider>
-        <Home />
-      </UserProvider>
+
+      <Home />
+        <Calculator />
+
     </div>
   );
 }
