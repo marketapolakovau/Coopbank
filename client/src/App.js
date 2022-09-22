@@ -9,10 +9,6 @@ function App() {
   return (
     <div className="App">
       <Home />
-
-      <PersonalDataForm />
-
-      <Calculator />
     </div>
   );
 }

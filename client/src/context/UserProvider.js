@@ -21,7 +21,14 @@ export function UserProvider({ children }) {
         setUser(data);
       });
   };
-  const value = { loginUser };
+  const isLogedIn = () => {
+    if (user?.error || !user) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+  const value = { loginUser, isLogedIn, user };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
