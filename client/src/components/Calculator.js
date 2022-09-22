@@ -10,6 +10,7 @@ function Calculator() {
 
     const [amountSliderValue, setAmountSliderValue] = useState(minAmount)
     const [monthsSliderValue, setMonthsSliderValue] = useState(minMonths)
+    const [periods, setPeriods] = useState()
 
     const [results, setResults] = useState({})
 
@@ -58,36 +59,64 @@ function Calculator() {
     //
     // }
 
-    // const period = monthsSliderValue;
-    // const calculatePeriod = monthCount => {
-    //     let months = 0, years = 0;
-    //     let msgMonths, msgYears = ''
-    //     while(monthCount){
-    //         if(monthCount >= 12){
-    //             years++;
-    //             monthCount -= 12;
-    //         } else{
-    //             months++;
-    //             monthCount--;
-    //         }
-    //     };
-    //     return (
-    //         if (years === 1){
-    //             msgYears = 'rok',
-    //         } else if ()
-    // )
-    // };
+    const period = monthsSliderValue;
+    const calculatePeriod = monthCount => {
+        let months = 0, years = 0;
+        let msgMonths, msgYears = '';
+        let result;
+        while (monthCount) {
+            if (monthCount >= 12) {
+                years++;
+                monthCount -= 12;
+            } else {
+                months++;
+                monthCount--;
+            }
+        }
 
-    // console.log(calculatePeriod(period));
+        if (years === 0) {
+            msgYears = '';
+        } else if (years === 1) {
+            msgYears = 'rok';
+        } else if (years >= 2 && years <= 4) {
+            msgYears = 'roky';
+        } else {
+            msgYears = 'let';
+        }
+
+        if (months === 0) {
+            msgMonths = '';
+        } else if (months === 1) {
+            msgMonths = 'měsíc'
+        } else if (months >= 2 && months <= 4) {
+            msgMonths = 'měsíce'
+        } else {
+            msgMonths = 'měsíců'
+        }
+
+        setPeriods( {
+            years, msgYears, months, msgMonths
+        })
+    };
+
+    console.log(calculatePeriod(period));
+
+useEffect(() => {
+    calculatePeriod()
+},[monthsSliderValue])
+
+
 
     return (
         <div>
             <Row>
                 <Form.Group>
                     <Form.Label>Částka</Form.Label>
+                    <div>{amountSliderValue}</div>
                     <Form.Range
                         min={minAmount}
                         max={maxAmount}
+                        step={5000}
                         value={amountSliderValue}
                         onChange={e => setAmountSliderValue(Number(e.target.value))}/>
                     <Container>
@@ -102,12 +131,15 @@ function Calculator() {
             <Row>
                 <Form.Group>
                     <Form.Label>Doba splácení </Form.Label>
-                    <div> {Math.floor(monthsSliderValue / 12)} rok {monthsSliderValue % 12}</div>
+                    {/*<div> {Math.floor(monthsSliderValue / 12)} rok {monthsSliderValue % 12}</div>*/}
+                    <div >{periods?.years}</div>
                     <Form.Range
                         min={minMonths}
                         max={maxMonths}
                         value={monthsSliderValue}
-                        onChange={e => setMonthsSliderValue(Number(e.target.value))}/>
+                        onChange={e =>
+                        {setMonthsSliderValue(Number(e.target.value))
+                        }}/>
                     <Container>
                         <Row>
                             <Col>{minMonths} měsíců</Col>
