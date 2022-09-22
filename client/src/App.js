@@ -1,12 +1,12 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Home from "./components/Home";
 import PersonalDataForm from "./components/PersonalDataForm";
 
 import Calculator from "./components/Calculator";
 
 
 function App() {
+
   return (
     <div className="App">
 
