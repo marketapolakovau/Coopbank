@@ -8,6 +8,7 @@ import { UserProvider } from "./context/UserProvider";
 import Admin from "./routes/Admin";
 import Home from "./components/Home";
 import Calculator from "./components/Calculator";
+import PersonalDataForm from "./components/PersonalDataForm";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -19,6 +20,7 @@ root.render(
           <Route path="" element={<Home />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/calculator" element={<Calculator />} />
+          <Route path="/form" element={<PersonalDataForm />} />
         </Routes>
       </BrowserRouter>
     </UserProvider>
