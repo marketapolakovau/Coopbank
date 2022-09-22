@@ -7,33 +7,35 @@ function IndividualForm() {
   const [individualFormData, setIndividualFormData] = useState({
     applicantType: "INDIVIDUAL",
     name: "",
-    surname: "Taufer",
+    surname: "",
     birthNum: "",
     nationality: "",
-    email: "jakubtaufer95@gmail.com",
+    email: "",
     phone: "",
-    IC: null,
-    companyName: null,
-    amount: null,
-    numOfMonths: null,
-    position: null,
-    address: [],
+    IC: "",
+    position: "",
+    companyName: "",
+    amount: 10000,
+    numOfMonths: 8,
+    address: {},
   });
 
-  const emptyAddress = () => {
-    return {
-      street: "",
-      descNumber: null,
-      indicativeNumber: null,
-      city: "",
-      postalCode: null,
-    };
-  };
+  const [addressData, setAddressData] = useState({
+    street: "",
+    descNumber: null,
+    indicativeNumber: null,
+    city: "",
+    postalCode: null,
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setIndividualFormData({ ...individualFormData, [name]: value });
-    console.log(individualFormData);
+  };
+
+  const handleChangeAddress = (e) => {
+    const { name, value } = e.target;
+    setAddressData({ ...addressData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -42,21 +44,25 @@ function IndividualForm() {
 
     if (!form.checkValidity()) {
       setValidated(true);
+
       return;
     }
 
-    // const newData = [...individualFormData];
+    const result = { ...individualFormData, address: addressData };
+
+    result.address.descNumber = +result.address.descNumber;
+    result.address.indicativeNumber = +result.address.indicativeNumber;
+    result.address.postalCode = +result.address.postalCode;
 
     setRequestAddCall({ state: "pending" });
 
     const res = await fetch(`http://localhost:8000/request/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(individualFormData),
+      body: JSON.stringify(result),
     });
 
     const data = await res.json();
-    console.log(data);
 
     if (res.status >= 400) {
       setRequestAddCall({ state: "error", error: data });
@@ -67,92 +73,134 @@ function IndividualForm() {
   };
 
   return (
-    <Form
-      className="container"
-      noValidate
-      validated={validated}
-      id={"form"}
-      onSubmit={handleSubmit}
-    >
+    <Form className="container" noValidate validated={validated} id={"form"}>
       <Row className="g-2">
         <Col>
           <FloatingLabel controlId="name" label="Jméno">
             <Form.Control
               type="text"
               name="name"
+              value={individualFormData.name}
               required
               onChange={handleChange}
             />
           </FloatingLabel>
         </Col>
         <Col>
-          <FloatingLabel controlId="floatingInputGrid" label="Příjmení">
-            <Form.Control type="text" />
+          <FloatingLabel controlId="surname" label="Příjmení">
+            <Form.Control
+              type="text"
+              name="surname"
+              value={individualFormData.surname}
+              onChange={handleChange}
+            />
           </FloatingLabel>
         </Col>
       </Row>
       <br />
       <Row className="g-2">
         <Col>
-          <FloatingLabel
-            controlId="floatingInputGrid"
-            label="Státní příslušnost"
-          >
-            <Form.Control type="text" />
+          <FloatingLabel controlId="nationality" label="Státní příslušnost">
+            <Form.Control
+              type="text"
+              name="nationality"
+              value={individualFormData.nationality}
+              onChange={handleChange}
+            />
           </FloatingLabel>
         </Col>
         <Col>
-          <FloatingLabel controlId="floatingInputGrid" label="Rodní číslo">
-            <Form.Control type="text" />
+          <FloatingLabel controlId="birthNum" label="Rodní číslo">
+            <Form.Control
+              type="text"
+              name="birthNum"
+              value={individualFormData.birthNum}
+              onChange={handleChange}
+            />
           </FloatingLabel>
         </Col>
       </Row>
       <br />
       <Row className="g-2">
         <Col>
-          <FloatingLabel controlId="floatingInputGrid" label="E-mail">
-            <Form.Control type="email" />
+          <FloatingLabel controlId="email" label="E-mail">
+            <Form.Control
+              type="email"
+              name="email"
+              value={individualFormData.email}
+              onChange={handleChange}
+            />
           </FloatingLabel>
         </Col>
         <Col>
-          <FloatingLabel controlId="floatingInputGrid" label="Telefon">
-            <Form.Control type="text" />
+          <FloatingLabel controlId="phone" label="Telefon">
+            <Form.Control
+              type="text"
+              name="phone"
+              value={individualFormData.phone}
+              onChange={handleChange}
+            />
           </FloatingLabel>
         </Col>
       </Row>
       <br />
       <Row className="mb-3 g-2">
         <Col>
-          <FloatingLabel controlId="floatingInputGrid" label="Ulice">
-            <Form.Control type="text" />
+          <FloatingLabel controlId="street" label="Ulice">
+            <Form.Control
+              type="text"
+              name="street"
+              value={addressData.street}
+              onChange={handleChangeAddress}
+            />
           </FloatingLabel>
         </Col>
         <Col>
-          <FloatingLabel controlId="floatingInputGrid" label="Číslo popisné">
-            <Form.Control type="text" />
+          <FloatingLabel controlId="descNumber" label="Číslo popisné">
+            <Form.Control
+              type="text"
+              name="descNumber"
+              value={addressData.descNumber}
+              onChange={handleChangeAddress}
+            />
           </FloatingLabel>
         </Col>
         <Col>
-          <FloatingLabel controlId="floatingInputGrid" label="Číslo orientační">
-            <Form.Control type="text" />
+          <FloatingLabel controlId="indicativeNumber" label="Číslo orientační">
+            <Form.Control
+              type="text"
+              name="indicativeNumber"
+              value={addressData.indicativeNumber}
+              onChange={handleChangeAddress}
+            />
           </FloatingLabel>
         </Col>
       </Row>
       <br />
       <Row className="g-2">
         <Col>
-          <FloatingLabel controlId="floatingInputGrid" label="Obec">
-            <Form.Control type="text" />
+          <FloatingLabel controlId="city" label="Obec">
+            <Form.Control
+              type="text"
+              name="city"
+              value={addressData.city}
+              onChange={handleChangeAddress}
+            />
           </FloatingLabel>
         </Col>
         <Col>
-          <FloatingLabel controlId="floatingInputGrid" label="PSČ">
-            <Form.Control type="text" />
+          <FloatingLabel controlId="postalCode" label="PSČ">
+            <Form.Control
+              type="text"
+              name="postalCode"
+              value={addressData.postalCode}
+              onChange={handleChangeAddress}
+            />
           </FloatingLabel>
         </Col>
       </Row>
       <br />
-      <Button variant="success" type="submit">
+      <Button variant="success" type="submit" onClick={handleSubmit}>
         Submit
       </Button>
     </Form>
