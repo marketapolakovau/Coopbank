@@ -14,7 +14,7 @@ import Icon from "@mdi/react";
 function App() {
   const { isLogedIn, logOut } = useContext(UserContext);
   return (
-    <div className="App container">
+    <div>
       <Navbar fixed="top" expand={"sm"} className="mb-3 navbar" variant="dark">
         <Container fluid>
           <Link to="/" className="navigation">
@@ -39,9 +39,13 @@ function App() {
                 )}
               </Nav>
               {isLogedIn() && (
-                <Button variant="outline-light" onClick={logOut}>
+                <button
+                  type="button"
+                  className="outline-white-button"
+                  onClick={logOut}
+                >
                   Odhlásit se
-                </Button>
+                </button>
               )}
             </Offcanvas.Body>
           </Navbar.Offcanvas>

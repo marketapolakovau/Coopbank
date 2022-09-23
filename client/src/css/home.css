@@ -1,0 +1,34 @@
+.home-container {
+  background-color: #00843d;
+  box-sizing: border-box;
+  margin-top: 100px;
+}
+.home-main-text-container {
+  padding-top: 30px;
+}
+
+.white-text {
+  color: white;
+}
+.photo {
+  width: 100%;
+}
+.home-heading {
+  font-weight: bold;
+  font-size: 3rem;
+  padding: 2rem 2rem 1rem 2rem;
+}
+
+.home-paragraph {
+  padding: 0 2rem 3rem 2rem;
+  font-size: medium;
+}
+
+.home-button {
+  margin-left: 2rem;
+  padding: 1rem 1.5rem 0rem 1.5rem;
+}
+
+.button-text {
+  font-weight: 700;
+}

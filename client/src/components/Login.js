@@ -17,57 +17,60 @@ function Login() {
     loginUser(loginData);
   };
   return (
-    <Form>
-      {user?.error && <WrongLogin />}
-      <Container className="container">
-        <Row xs={1} md={2}>
-          <Col>
-            <Form.Label className="greyText">Uživatelské jméno</Form.Label>
+    <div className="container">
+      <Form>
+        {user?.error && <WrongLogin />}
+        <Container>
+          <Row xs={1} md={2}>
+            <Col>
+              <Form.Label className="greyText">Uživatelské jméno</Form.Label>
 
-            <InputGroup className="mb-3" controlId="ControlInput1">
-              <InputGroup.Text
-                style={{ backgroundColor: "white", borderRight: "none" }}
-                id="basic-addon1"
-              >
-                <Icon size={1} path={mdiAccountOutline} className="icon" />
-              </InputGroup.Text>
-              <Form.Control
-                onChange={handleChange}
-                type="text"
-                name="username"
-              />
-            </InputGroup>
-          </Col>
-          <Col>
-            <Form.Label className="greyText">Heslo</Form.Label>
-            <InputGroup as={Col} className="mb-3" controlId="ControlInpu2">
-              <InputGroup.Text
-                style={{ backgroundColor: "white" }}
-                id="basic-addon1"
-              >
-                <Icon size={1} path={mdiLockOpenOutline} className="icon" />
-              </InputGroup.Text>
+              <InputGroup className="mb-3" controlId="ControlInput1">
+                <InputGroup.Text
+                  style={{ backgroundColor: "white", borderRight: "none" }}
+                  id="basic-addon1"
+                >
+                  <Icon size={1} path={mdiAccountOutline} className="icon" />
+                </InputGroup.Text>
+                <input
+                  className="input"
+                  onChange={handleChange}
+                  type="text"
+                  name="username"
+                />
+              </InputGroup>
+            </Col>
+            <Col>
+              <Form.Label className="greyText">Heslo</Form.Label>
+              <InputGroup as={Col} className="mb-3" controlId="ControlInpu2">
+                <InputGroup.Text
+                  style={{ backgroundColor: "white" }}
+                  id="basic-addon1"
+                >
+                  <Icon size={1} path={mdiLockOpenOutline} className="icon" />
+                </InputGroup.Text>
 
-              <Form.Control
-                onChange={handleChange}
-                type="password"
-                name="password"
-              />
+                <input
+                  className="input"
+                  onChange={handleChange}
+                  type="password"
+                  name="password"
+                />
+              </InputGroup>
+            </Col>
+            <InputGroup>
+              <button
+                type="button"
+                className="primary-button"
+                onClick={handleSubmit}
+              >
+                Přihlásit se
+              </button>
             </InputGroup>
-          </Col>
-          <InputGroup>
-            <Button
-              style={{ backgroundColor: "#00843d" }}
-              variant="success"
-              className="btn btn-success btn-md"
-              onClick={handleSubmit}
-            >
-              Přihlásit se
-            </Button>
-          </InputGroup>
-        </Row>
-      </Container>
-    </Form>
+          </Row>
+        </Container>
+      </Form>
+    </div>
   );
 }
 
