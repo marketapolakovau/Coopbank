@@ -108,7 +108,7 @@ function RequestDetail() {
             <Card body>
               <Row>
                 <Col>Výše úvěru</Col>
-                <Col>{request?.amount.toLocaleString()} CZK</Col>
+                <Col>{request?.amount?.toLocaleString()} CZK</Col>
               </Row>
             </Card>
             <Card body>
@@ -120,7 +120,7 @@ function RequestDetail() {
             <Card body>
               <Row>
                 <Col>Měsíční splátka</Col>
-                <Col>{calculateData?.monthlyPayment.toLocaleString()} CZK</Col>
+                <Col>{calculateData?.monthlyPayment?.toLocaleString()} CZK</Col>
               </Row>
             </Card>{" "}
             <Card body>
@@ -138,7 +138,7 @@ function RequestDetail() {
             <Card body>
               <Row>
                 <Col>Celková částka</Col>
-                <Col>{calculateData?.overallAmount.toLocaleString()} CZK</Col>
+                <Col>{calculateData?.overallAmount?.toLocaleString()} CZK</Col>
               </Row>
             </Card>{" "}
             <Card body>
