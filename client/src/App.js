@@ -8,8 +8,11 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button } from "react-bootstrap";
 import UserContext from "./context/UserProvider";
+import { mdiCalculator } from "@mdi/js";
+import Icon from "@mdi/react";
 
 function App() {
+  const { isLogedIn, logOut } = useContext(UserContext);
   return (
     <div className="App container">
       <Navbar fixed="top" expand={"sm"} className="mb-3 navbar" variant="dark">
@@ -28,11 +31,18 @@ function App() {
             </Offcanvas.Header>
             <Offcanvas.Body>
               <Nav className="justify-content-end flex-grow-1 pe-3">
-                <Link className="navigation" to="/calculator">
-                  Kalkulačka
-                </Link>
+                {!isLogedIn() && (
+                  <Link className="navigation" to="/calculator">
+                    <Icon size={1} path={mdiCalculator} className="icon" />
+                    Kalkulačka
+                  </Link>
+                )}
               </Nav>
-              <Button variant="outline-light"></Button>
+              {isLogedIn() && (
+                <Button variant="outline-light" onClick={logOut}>
+                  Odhlásit se
+                </Button>
+              )}
             </Offcanvas.Body>
           </Navbar.Offcanvas>
         </Container>

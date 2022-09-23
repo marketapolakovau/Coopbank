@@ -28,7 +28,10 @@ export function UserProvider({ children }) {
       return true;
     }
   };
-  const value = { loginUser, isLogedIn, user };
+  const logOut = () => {
+    setUser(false);
+  };
+  const value = { loginUser, isLogedIn, user, logOut };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }

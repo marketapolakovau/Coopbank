@@ -9,6 +9,7 @@ import Admin from "./routes/Admin";
 import Home from "./components/Home";
 import Calculator from "./components/Calculator";
 import PersonalDataForm from "./components/PersonalDataForm";
+import RequestDetail from "./components/RequestDetail";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -21,6 +22,7 @@ root.render(
             <Route path="/admin" element={<Admin />} />
             <Route path="/calculator" element={<Calculator />} />
             <Route path="/form" element={<PersonalDataForm />} />
+            <Route path="/request/:id" element={<RequestDetail />} />
           </Route>
         </Routes>
       </BrowserRouter>

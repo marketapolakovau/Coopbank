@@ -13,6 +13,10 @@
 .greyText {
   color: #666666;
 }
+.greenText {
+  color: #00843d;
+  font-weight: bold;
+}
 .icon {
   color: #ced4da;
 }
@@ -28,4 +32,16 @@
 .navigation:hover {
   text-decoration: none;
   color: rgb(208, 206, 206);
+}
+
+.outline-button {
+  background-color: white;
+  border-color: #00843d;
+  color: #00843d;
+  padding: 8px 15px;
+}
+.outline-button:hover {
+  background-color: #00843d;
+  border-color: #00843d;
+  color: white;
 }
