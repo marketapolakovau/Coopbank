@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Form, Button, Row, Col, Container} from "react-bootstrap";
+import styles from '../css/range.module.css'
 
 
 function Calculator() {
@@ -10,6 +11,7 @@ function Calculator() {
 
     const [amountSliderValue, setAmountSliderValue] = useState(minAmount)
     const [monthsSliderValue, setMonthsSliderValue] = useState(minMonths)
+    const [periods, setPeriods] = useState()
 
     const [results, setResults] = useState({})
 
@@ -59,78 +61,113 @@ function Calculator() {
     // }
 
     // const period = monthsSliderValue;
-    // const calculatePeriod = monthCount => {
-    //     let months = 0, years = 0;
-    //     let msgMonths, msgYears = ''
-    //     while(monthCount){
-    //         if(monthCount >= 12){
-    //             years++;
-    //             monthCount -= 12;
-    //         } else{
-    //             months++;
-    //             monthCount--;
-    //         }
-    //     };
-    //     return (
-    //         if (years === 1){
-    //             msgYears = 'rok',
-    //         } else if ()
-    // )
-    // };
+    const calculatePeriod = monthCount => {
+        let months = 0, years = 0;
+        let msgMonths, msgYears = '';
+        // let result;
+        while (monthCount) {
+            if (monthCount >= 12) {
+                years++;
+                monthCount -= 12;
+            } else {
+                months++;
+                monthCount--;
+            }
+        }
 
-    // console.log(calculatePeriod(period));
+        if (years === 0) {
+            msgYears = '';
+        } else if (years === 1) {
+            msgYears = 'rok';
+        } else if (years >= 2 && years <= 4) {
+            msgYears = 'roky';
+        } else {
+            msgYears = 'let';
+        }
+
+        if (months === 0) {
+            msgMonths = '';
+        } else if (months === 1) {
+            msgMonths = 'měsíc'
+        } else if (months >= 2 && months <= 4) {
+            msgMonths = 'měsíce'
+        } else {
+            msgMonths = 'měsíců'
+        }
+
+        setPeriods({years, msgYears, months, msgMonths})
+    };
+
 
     return (
-        <div>
-            <Row>
-                <Form.Group>
-                    <Form.Label>Částka</Form.Label>
-                    <Form.Range
-                        min={minAmount}
-                        max={maxAmount}
-                        value={amountSliderValue}
-                        onChange={e => setAmountSliderValue(Number(e.target.value))}/>
-                    <Container>
+        <Row className={styles.calc} xs={1} md={2}>
+            <Col md={8}>
+            <Container className={styles.slidersContainer}>
+                <Row>
+                    <Form.Group className={styles.amountSliderGroup}>
                         <Row>
-                            <Col>{minAmount}</Col>
-                            <Col>{maxAmount}</Col>
+                            <Form.Label className={styles.loanAmountText}> Chci si půjčit </Form.Label>
+                            <div className={styles.loanAmount}>{amountSliderValue.toLocaleString()} Kč</div>
                         </Row>
-                    </Container>
-                </Form.Group>
-            </Row>
+                        <Form.Range
+                            className={styles.slider}
+                            min={minAmount}
+                            max={maxAmount}
+                            step={5000}
+                            value={amountSliderValue}
+                            onChange={e => setAmountSliderValue(Number(e.target.value))}/>
+                        <Container className={styles.loanAmountRange}>
+                            <Row>
+                                <Col>{minAmount.toLocaleString()} Kč</Col>
+                                <Col>{maxAmount.toLocaleString()} Kč</Col>
+                            </Row>
+                        </Container>
+                    </Form.Group>
+                </Row>
 
-            <Row>
-                <Form.Group>
-                    <Form.Label>Doba splácení </Form.Label>
-                    <div> {Math.floor(monthsSliderValue / 12)} rok {monthsSliderValue % 12}</div>
-                    <Form.Range
-                        min={minMonths}
-                        max={maxMonths}
-                        value={monthsSliderValue}
-                        onChange={e => setMonthsSliderValue(Number(e.target.value))}/>
-                    <Container>
+                <Row>
+                    <Form.Group className={styles.periodSliderGroup}>
                         <Row>
-                            <Col>{minMonths} měsíců</Col>
-                            <Col>{maxMonths / 12} let</Col>
+                            <Form.Label className={styles.loanPeriodText}>Doba splácení </Form.Label>
+                            <div className={styles.loanPeriod}>
+                                {periods?.years} {periods?.msgYears} {periods?.months} {periods?.msgMonths}
+                            </div>
                         </Row>
-                    </Container>
-                </Form.Group>
-            </Row>
+                        <Form.Range
+                            className={styles.slider}
+                            min={minMonths}
+                            max={maxMonths}
+                            value={monthsSliderValue}
+                            onChange={(e) => {
+                                setMonthsSliderValue(Number(e.target.value));
+                                calculatePeriod(monthsSliderValue);
+                            }}
+                            style={{'cursor': "green"}}/>
+                        <Container className={styles.loanPeriodRange}>
+                            <Row>
+                                <Col>{minMonths} měsíců</Col>
+                                <Col>{maxMonths / 12} let</Col>
+                            </Row>
+                        </Container>
+                    </Form.Group>
+                </Row>
+            </Container>
+            </Col>
 
-            <div>
-                <div>Měsíční částka činí {results.monthlyPayment}</div>
-                <div>Roční úroková sazba {results.yearlyInterest}</div>
-                <div>RPSN {results.RPSN}</div>
-                <div>Celková splatná částka {results.overallAmount}</div>
-            </div>
-
-
-            <Button
-                variant='primary'
-                style={{width: '20%', margin: 10}}>
-                Chci zažádat o půjčku
-            </Button>
-        </div>
+            <Col md={4}>
+            <Container className={styles.loanInfoBox}>
+                {/*<div as={Col} className="mb-3">*/}
+                <div>Měsíční částka činí: {results.monthlyPayment} Kč</div>
+                <div>Roční úroková sazba: {results.yearlyInterest} %</div>
+                <div>RPSN: {results.RPSN} %</div>
+                <div>Celková splatná částka: {results.overallAmount} Kč</div>
+                {/*</div>*/}
+                <button className={styles.btnApply}>
+                    Chci zažádat o půjčku
+                </button>
+            </Container>
+            </Col>
+        </Row>
 
     )
 }
