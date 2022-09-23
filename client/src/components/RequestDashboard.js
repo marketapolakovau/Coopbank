@@ -137,7 +137,14 @@ function RequestDashboard() {
                   <td>{element.surname}</td>
                   <td>{element.amount.toLocaleString()} CZK</td>
                   <td>{element.numOfMonths} měsíců</td>
-                  <td>{element.status}</td>
+                  <td>
+                    {" "}
+                    {element?.status === "APPROVED"
+                      ? "SCHVÁLENO"
+                      : element?.status === "CANCELLED"
+                      ? "ZAMÍTNUTO"
+                      : "ČEKÁ NA VYŘÍZENÍ"}
+                  </td>
                   <td>
                     <Link
                       to={`/request/${element.id}`}

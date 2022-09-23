@@ -8,7 +8,8 @@
 }
 
 .container {
-  margin-top: 20px;
+  padding-bottom: 50px;
+  margin-top: 100px;
 }
 .greyText {
   color: #666666;
@@ -35,8 +36,9 @@
 }
 
 .outline-button {
+  text-decoration: none;
   background-color: white;
-  border-color: #00843d;
+  border: 1px solid #00843d;
   color: #00843d;
   padding: 8px 15px;
 }
@@ -44,4 +46,41 @@
   background-color: #00843d;
   border-color: #00843d;
   color: white;
+}
+
+.outline-white-button {
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0);
+  border: 1px solid white;
+  color: white;
+  padding: 8px 15px;
+}
+.outline-white-button:hover {
+  background-color: white;
+  border-color: white;
+  color: #00843d;
+}
+.primary-button {
+  background-color: #00843d;
+  border: none;
+  color: white;
+  padding: 8px 15px;
+  margin-right: 10px;
+}
+.danger-button {
+  background-color: #dd0000;
+  border: none;
+  color: white;
+  padding: 10px 8px;
+}
+
+.white-button {
+  background-color: white;
+  border: none;
+  padding: 8px 15px;
+  color: #00843d;
+}
+.input {
+  width: 30rem;
+  border: 1px solid #ced4da;
 }

@@ -31,7 +31,50 @@ export function UserProvider({ children }) {
   const logOut = () => {
     setUser(false);
   };
-  const value = { loginUser, isLogedIn, user, logOut };
+  const approveRequest = (id) => {
+    fetch(`http://localhost:8000/request/${id}/approve`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((e) => console.log(e));
+  };
+
+  const deleteRequest = (id) => {
+    fetch(`http://localhost:8000/request/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((e) => console.log(e));
+  };
+
+  const cancelRequest = (id) => {
+    fetch(`http://localhost:8000/request/${id}/cancel`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((e) => console.log(e));
+  };
+  const value = {
+    loginUser,
+    isLogedIn,
+    user,
+    logOut,
+    approveRequest,
+    cancelRequest,
+    deleteRequest,
+  };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
