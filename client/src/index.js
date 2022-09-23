@@ -16,15 +16,15 @@ root.render(
     <UserProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<App />}></Route>
-          <Route path="" element={<Home />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/calculator" element={<Calculator />} />
-          <Route path="/form" element={<PersonalDataForm />} />
+          <Route path="/" element={<App />}>
+            <Route path="" element={<Home />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/calculator" element={<Calculator />} />
+            <Route path="/form" element={<PersonalDataForm />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </UserProvider>
-    <App />
   </React.StrictMode>
 );
 
