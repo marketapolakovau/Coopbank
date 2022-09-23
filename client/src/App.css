@@ -8,6 +8,7 @@
 }
 
 .container {
+  padding-bottom: 2rem;
   margin-top: 20px;
 }
 .greyText {
@@ -44,4 +45,21 @@
   background-color: #00843d;
   border-color: #00843d;
   color: white;
+}
+.primary-button {
+  background-color: #00843d;
+  border: none;
+  color: white;
+  padding: 8px 15px;
+  margin-right: 10px;
+}
+.danger-button {
+  background-color: #dd0000;
+  border: none;
+  color: white;
+  padding: 8px 15px;
+}
+.button-container {
+  position: absolute;
+  right: 90px;
 }

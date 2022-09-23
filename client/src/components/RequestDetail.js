@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Card, Container, Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import Icon from "@mdi/react";
+import { mdiDeleteOutline } from "@mdi/js";
 
 function RequestDetail() {
   const [request, setRequest] = useState();
@@ -36,8 +38,18 @@ function RequestDetail() {
   }, [request]);
   return (
     <div>
-      <h3 className="greenText">Detail žádosti</h3>
+      <Row>
+        <Col>
+          <h3 className="greenText">Detail žádosti</h3>
+        </Col>
 
+        <Col>
+          <button className="danger-button delete">
+            <Icon size={1} path={mdiDeleteOutline} />
+            Odstranit žádost
+          </button>
+        </Col>
+      </Row>
       <Row>
         <Col>
           <Container>
@@ -55,28 +67,63 @@ function RequestDetail() {
             </Card>
             <Card body>
               <Row className="row">
-                <Col>Jméno</Col>
-                <Col>{request?.name}</Col>
+                <Col>
+                  {request?.applicantType === "LEGAL_ENTITY"
+                    ? "Název firmy"
+                    : "Jméno"}
+                </Col>
+                <Col>
+                  {request?.applicantType === "LEGAL_ENTITY"
+                    ? request?.companyName
+                    : request?.name}
+                </Col>
               </Row>
             </Card>
             <Card body>
               <Row>
-                <Col>Příjmení</Col>
-                <Col>{request?.surname}</Col>
+                <Col>
+                  {" "}
+                  {request?.applicantType === "LEGAL_ENTITY"
+                    ? "IČO"
+                    : "Příjmení"}
+                </Col>
+                <Col>
+                  {request?.applicantType === "LEGAL_ENTITY"
+                    ? request?.IC
+                    : request?.surname}
+                </Col>
               </Row>
-            </Card>{" "}
+            </Card>
             <Card body>
               <Row>
-                <Col>Rodné číslo</Col>
-                <Col>{request?.birthNum}</Col>
+                <Col>
+                  {request?.applicantType === "LEGAL_ENTITY" &&
+                    "Jméno a příjmení"}
+                  {request?.applicantType === "INDIVIDUAL" && "Rodné číslo"}
+                  {request?.applicantType === "OSVC" && "IČO"}
+                </Col>
+                <Col>
+                  {request?.applicantType === "LEGAL_ENTITY" &&
+                    request.name + " " + request.surname}
+                  {request?.applicantType === "INDIVIDUAL" && request?.birthNum}
+                  {request?.applicantType === "OSVC" && request?.IC}
+                </Col>
               </Row>
-            </Card>{" "}
+            </Card>
             <Card body>
               <Row>
-                <Col>Státní příslušnost</Col>
-                <Col>{request?.nationality}</Col>
+                <Col>
+                  {request?.applicantType === "LEGAL_ENTITY"
+                    ? "Funkce"
+                    : "Státní příslušnost"}
+                </Col>
+                <Col>
+                  {request?.applicantType === "LEGAL_ENTITY"
+                    ? request?.position
+                    : request?.nationality}
+                </Col>
               </Row>
-            </Card>{" "}
+            </Card>
             <Card body>
               <Row>
                 <Col>Email</Col>
@@ -150,6 +197,10 @@ function RequestDetail() {
           </Container>
         </Col>
       </Row>
+      <div className="button-container">
+        <button className="primary-button">Schválit</button>
+        <button className="danger-button">Zamítnout</button>
+      </div>
     </div>
   );
 }
