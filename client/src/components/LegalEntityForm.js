@@ -6,9 +6,14 @@ import {
   FloatingLabel,
   Button,
   InputGroup,
+  Modal,
 } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import CompanyPositionMap from "./CompanyPositionMap";
 
 function LegalEntityForm() {
+  const [newRequestData, setNewRequestData] = useState();
+  const [showModal, setShowModal] = useState(false);
   const [validated, setValidated] = useState(false);
   const [requestAddCall, setRequestAddCall] = useState({ state: "inactive" });
   const [legalEntityFormData, setLegalEntityFormData] = useState({
@@ -35,6 +40,7 @@ function LegalEntityForm() {
   });
   const [prefixData, setPrefixData] = useState("+420");
   const [phoneNumData, setPhoneNumData] = useState("");
+  const [positionName, setPositionName] = useState("členka představenstva");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,21 +52,17 @@ function LegalEntityForm() {
     setAddressData({ ...addressData, [name]: value });
   };
 
+  const handleShowModal = () => setShowModal(true);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const form = event.currentTarget;
 
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
+    if (!form.checkValidity()) {
+      setValidated(true);
+      return;
     }
-
-    setValidated(true);
-
-    // if (!form.checkValidity()) {
-    //   setValidated(true);
-    //   return;
-    // }
 
     const result = { ...legalEntityFormData, address: addressData };
 
@@ -68,10 +70,11 @@ function LegalEntityForm() {
     result.address.indicativeNumber = +result.address.indicativeNumber;
     result.address.postalCode = +result.address.postalCode;
     result.phone = prefixData + phoneNumData;
+    result.position = positionName;
 
     setRequestAddCall({ state: "pending" });
 
-    const res = await fetch(`http://localhost:8000/request/create`, {
+    const res = await fetch(`request/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(result),
@@ -84,7 +87,10 @@ function LegalEntityForm() {
     } else {
       console.log(data);
       setRequestAddCall({ state: "success", data });
+      setNewRequestData(data);
     }
+
+    handleShowModal();
   };
 
   return (
@@ -105,24 +111,15 @@ function LegalEntityForm() {
                 required
                 onChange={handleChange}
               />
-              <Form.Control.Feedback type="invalid">
+              <Form.Control.Feedback type="invalid" onChange={handleChange}>
                 Název firmy je vyžadovaný
               </Form.Control.Feedback>
             </FloatingLabel>
           </Col>
           <Col>
-            <FloatingLabel controlId="position" label="Funkce ve firmě">
-              <Form.Control
-                type="text"
-                name="position"
-                value={legalEntityFormData.position}
-                required
-                onChange={handleChange}
-              />
-              <Form.Control.Feedback type="invalid">
-                Funkce ve firmě je vyžadovaná
-              </Form.Control.Feedback>
-            </FloatingLabel>
+            <Form.Select onChange={(e) => setPositionName(e.target.value)}>
+              <CompanyPositionMap />
+            </Form.Select>
           </Col>
         </Row>
         <Row className="g-2 mb-3">
@@ -203,7 +200,7 @@ function LegalEntityForm() {
           <Col>
             <InputGroup>
               <Form.Select
-                style={{ maxWidth: "100px" }}
+                style={{ maxWidth: "120px" }}
                 onChange={(e) => setPrefixData(e.target.value)}
               >
                 <option value="+420">+420</option>
@@ -244,14 +241,14 @@ function LegalEntityForm() {
             <FloatingLabel controlId="descNumber" label="Číslo popisné">
               <Form.Control
                 type="text"
-                pattern="\b([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])\b"
+                pattern="^\d[0-9a-zA-Z]*$"
                 name="descNumber"
                 value={addressData.descNumber}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní popisné číslo (1-9999)
+                Vyplňte platní popisné číslo
               </Form.Control.Feedback>
             </FloatingLabel>
           </Col>
@@ -262,14 +259,14 @@ function LegalEntityForm() {
             >
               <Form.Control
                 type="text"
-                pattern="\b([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])\b"
+                pattern="^\d[0-9a-zA-Z]*$"
                 name="indicativeNumber"
                 value={addressData.indicativeNumber}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní orientační číslo (1-9999)
+                Vyplňte platní orientační číslo
               </Form.Control.Feedback>
             </FloatingLabel>
           </Col>
@@ -293,14 +290,14 @@ function LegalEntityForm() {
             <FloatingLabel controlId="postalCode" label="PSČ">
               <Form.Control
                 type="text"
-                pattern="^\d{5}$"
+                pattern="\d{3}[ ]?\d{2}"
                 name="postalCode"
                 value={addressData.postalCode}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní PSČ ve formátu XXXXX
+                Vyplňte platní PSČ
               </Form.Control.Feedback>
             </FloatingLabel>
           </Col>
@@ -308,7 +305,12 @@ function LegalEntityForm() {
         <br />
         <Row>
           <Col>
-            <Button size="lg" variant="success" type="submit">
+            <Button
+              size="lg"
+              variant="success"
+              type="submit"
+              // onClick={handleShowModal}
+            >
               Zažádat o půjčku
             </Button>
           </Col>
@@ -320,8 +322,88 @@ function LegalEntityForm() {
           </Col>
         </Row>
       </Form>
+      <Modal show={showModal} centered>
+        <Modal.Header style={{ backgroundColor: "#00843D" }}>
+          <Modal.Title style={{ color: "#fff" }}>Potvrzeni</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            Děkujeme za využití služeb Coopbank. Přehled svojí žádosti si můžete
+            prohlédnout na nasledujícím odkazu.
+          </p>
+          <Link to={`/request/${newRequestData?.id}`}>
+            <Button variant="success">Přehled</Button>
+          </Link>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary">Hlavní stranka</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
 
 export default LegalEntityForm;
+
+{
+  /* <Row className="g-2 mb-3">
+  <Col>
+    <FloatingLabel controlId="companyName" label="Název firmy">
+      <Form.Control
+        type="text"
+        name="companyName"
+        value={legalEntityFormData.companyName}
+        required
+        onChange={handleChange}
+      />
+      <Form.Control.Feedback type="invalid" onChange={handleChange}>
+        Název firmy je vyžadovaný
+      </Form.Control.Feedback>
+    </FloatingLabel>
+  </Col>
+  <Col>
+    <Form.Select>
+      <CompanyPositionMap />
+    </Form.Select>
+  </Col>
+</Row>; */
+}
+
+// členka představenstva
+// členka správní rady
+// členka výboru
+// člen představenstva
+// člen správní rady
+// člen výboru
+// ekonom
+// ekonomka
+// generální ředitel
+// generální ředitelka
+// jednatel
+// jednatelka
+// místopředseda
+// místopředsedkyně
+// místostarosta
+// místostarostka
+// předseda
+// předseda představenstva
+// předseda správní rady
+// předsedkyně
+// předsedkyně představenstva
+// předsedkyně správní rady
+// primátor
+// primátorka
+// prokurista
+// prokuristka
+// ředitel
+// ředitelka
+// společník
+// starosta
+// starostka
+// statutární ředitel
+// statutární ředitelka
+// účetní
+// zástupce
+// zástupkyně
+// zplnomocněná
+// zplnomocněný

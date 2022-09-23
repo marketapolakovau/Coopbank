@@ -6,9 +6,13 @@ import {
   FloatingLabel,
   Button,
   InputGroup,
+  Modal,
 } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function IndividualForm() {
+  const [newRequestData, setNewRequestData] = useState();
+  const [showModal, setShowModal] = useState(false);
   const [validated, setValidated] = useState(false);
   const [requestAddCall, setRequestAddCall] = useState({ state: "inactive" });
   const [individualFormData, setIndividualFormData] = useState({
@@ -46,21 +50,17 @@ function IndividualForm() {
     setAddressData({ ...addressData, [name]: value });
   };
 
+  const handleShowModal = () => setShowModal(true);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const form = event.currentTarget;
 
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
+    if (!form.checkValidity()) {
+      setValidated(true);
+      return;
     }
-
-    setValidated(true);
-
-    // if (!form.checkValidity()) {
-    //   setValidated(true);
-    //   return;
-    // }
 
     const result = { ...individualFormData, address: addressData };
 
@@ -71,7 +71,7 @@ function IndividualForm() {
 
     setRequestAddCall({ state: "pending" });
 
-    const res = await fetch(`http://localhost:8000/request/create`, {
+    const res = await fetch(`request/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(result),
@@ -84,7 +84,10 @@ function IndividualForm() {
     } else {
       console.log(data);
       setRequestAddCall({ state: "success", data });
+      setNewRequestData(data);
     }
+
+    handleShowModal();
   };
 
   return (
@@ -173,7 +176,7 @@ function IndividualForm() {
           <Col>
             <InputGroup>
               <Form.Select
-                style={{ maxWidth: "100px" }}
+                style={{ maxWidth: "120px" }}
                 onChange={(e) => setPrefixData(e.target.value)}
               >
                 <option value="+420">+420</option>
@@ -214,14 +217,14 @@ function IndividualForm() {
             <FloatingLabel controlId="descNumber" label="Číslo popisné">
               <Form.Control
                 type="text"
-                pattern="\b([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])\b"
+                pattern="^\d[0-9a-zA-Z]*$"
                 name="descNumber"
                 value={addressData.descNumber}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní popisné číslo (1-9999)
+                Vyplňte platní popisné číslo
               </Form.Control.Feedback>
             </FloatingLabel>
           </Col>
@@ -232,14 +235,14 @@ function IndividualForm() {
             >
               <Form.Control
                 type="text"
-                pattern="\b([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])\b"
+                pattern="^\d[0-9a-zA-Z]*$"
                 name="indicativeNumber"
                 value={addressData.indicativeNumber}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní orientační číslo (1-9999)
+                Vyplňte platní orientační číslo
               </Form.Control.Feedback>
             </FloatingLabel>
           </Col>
@@ -263,14 +266,14 @@ function IndividualForm() {
             <FloatingLabel controlId="postalCode" label="PSČ">
               <Form.Control
                 type="text"
-                pattern="^\d{5}$"
+                pattern="\d{3}[ ]?\d{2}"
                 name="postalCode"
                 value={addressData.postalCode}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní PSČ ve formátu XXXXX
+                Vyplňte platní PSČ
               </Form.Control.Feedback>
             </FloatingLabel>
           </Col>
@@ -278,7 +281,12 @@ function IndividualForm() {
         <br />
         <Row>
           <Col>
-            <Button size="lg" variant="success" type="submit">
+            <Button
+              size="lg"
+              variant="success"
+              type="submit"
+              // onClick={handleShowModal}
+            >
               Zažádat o půjčku
             </Button>
           </Col>
@@ -290,6 +298,23 @@ function IndividualForm() {
           </Col>
         </Row>
       </Form>
+      <Modal show={showModal} centered>
+        <Modal.Header style={{ backgroundColor: "#00843D" }}>
+          <Modal.Title style={{ color: "#fff" }}>Potvrzeni</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            Děkujeme za využití služeb Coopbank. Přehled svojí žádosti si můžete
+            prohlédnout na nasledujícím odkazu.
+          </p>
+          <Link to={`/request/${newRequestData?.id}`}>
+            <Button variant="success">Přehled</Button>
+          </Link>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary">Hlavní stranka</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

@@ -205,14 +205,14 @@ function OsvcForm() {
             <FloatingLabel controlId="descNumber" label="Číslo popisné">
               <Form.Control
                 type="text"
-                pattern="\b([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])\b"
+                pattern="^\d[0-9a-zA-Z]*$"
                 name="descNumber"
                 value={addressData.descNumber}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní popisné číslo (1-9999)
+                Vyplňte platní popisné číslo
               </Form.Control.Feedback>
             </FloatingLabel>
           </Col>
@@ -223,14 +223,14 @@ function OsvcForm() {
             >
               <Form.Control
                 type="text"
-                pattern="\b([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])\b"
+                pattern="^\d[0-9a-zA-Z]*$"
                 name="indicativeNumber"
                 value={addressData.indicativeNumber}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní orientační číslo (1-9999)
+                Vyplňte platní orientační číslo
               </Form.Control.Feedback>
             </FloatingLabel>
           </Col>
@@ -254,7 +254,7 @@ function OsvcForm() {
             <FloatingLabel controlId="postalCode" label="PSČ">
               <Form.Control
                 type="text"
-                pattern="^\d{5}$"
+                pattern="\d{3}[ ]?\d{2}"
                 name="postalCode"
                 value={addressData.postalCode}
                 required
