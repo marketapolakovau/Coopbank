@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Form, Button, Row, Col, Container} from "react-bootstrap";
+import {Form, Table, Row, Col, Container} from "react-bootstrap";
 import styles from '../css/range.module.css'
 
 
@@ -102,70 +102,97 @@ function Calculator() {
     return (
         <Row className={styles.calc} xs={1} md={2}>
             <Col md={8}>
-            <Container className={styles.slidersContainer}>
-                <Row>
-                    <Form.Group className={styles.amountSliderGroup}>
-                        <Row>
-                            <Form.Label className={styles.loanAmountText}> Chci si půjčit </Form.Label>
-                            <div className={styles.loanAmount}>{amountSliderValue.toLocaleString()} Kč</div>
-                        </Row>
-                        <Form.Range
-                            className={styles.slider}
-                            min={minAmount}
-                            max={maxAmount}
-                            step={5000}
-                            value={amountSliderValue}
-                            onChange={e => setAmountSliderValue(Number(e.target.value))}/>
-                        <Container className={styles.loanAmountRange}>
+                <Container className={styles.slidersContainer}>
+                    <Row>
+                        <Form.Group className={styles.amountSliderGroup}>
                             <Row>
-                                <Col>{minAmount.toLocaleString()} Kč</Col>
-                                <Col>{maxAmount.toLocaleString()} Kč</Col>
+                                <Form.Label className={styles.loanAmountText}> Chci si půjčit </Form.Label>
+                                <div className={styles.loanAmount}>{amountSliderValue.toLocaleString()} Kč</div>
                             </Row>
-                        </Container>
-                    </Form.Group>
-                </Row>
+                            <Form.Range
+                                className={styles.slider}
+                                min={minAmount}
+                                max={maxAmount}
+                                step={amountSliderValue <= 50000 ? 1000 : 5000}
+                                value={amountSliderValue}
+                                onChange={e => setAmountSliderValue(Number(e.target.value))}/>
+                            <Container className={styles.loanAmountRange}>
+                                <Row>
+                                    <Col className={styles.minAmount}>{minAmount.toLocaleString()} Kč</Col>
+                                    <Col className={styles.maxAmount}>{maxAmount.toLocaleString()} Kč</Col>
+                                </Row>
+                            </Container>
+                        </Form.Group>
+                    </Row>
 
-                <Row>
-                    <Form.Group className={styles.periodSliderGroup}>
-                        <Row>
-                            <Form.Label className={styles.loanPeriodText}>Doba splácení </Form.Label>
-                            <div className={styles.loanPeriod}>
-                                {periods?.years} {periods?.msgYears} {periods?.months} {periods?.msgMonths}
-                            </div>
-                        </Row>
-                        <Form.Range
-                            className={styles.slider}
-                            min={minMonths}
-                            max={maxMonths}
-                            value={monthsSliderValue}
-                            onChange={(e) => {
-                                setMonthsSliderValue(Number(e.target.value));
-                                calculatePeriod(monthsSliderValue);
-                            }}
-                            style={{'cursor': "green"}}/>
-                        <Container className={styles.loanPeriodRange}>
+                    <Row>
+                        <Form.Group className={styles.periodSliderGroup}>
                             <Row>
-                                <Col>{minMonths} měsíců</Col>
-                                <Col>{maxMonths / 12} let</Col>
+                                <Form.Label className={styles.loanPeriodText}>Doba splácení </Form.Label>
+
+                                {monthsSliderValue % 12 === 0 ?
+                                    (<div className={styles.loanPeriod}>{periods?.years} {periods?.msgYears}</div>) :
+                                    (<div className={styles.loanPeriod}>
+                                        {periods?.years || ''} {periods?.msgYears} {periods?.months} {periods?.msgMonths}
+                                    </div>)}
+
+
                             </Row>
-                        </Container>
-                    </Form.Group>
-                </Row>
-            </Container>
+                            <Form.Range
+                                className={styles.slider}
+                                min={minMonths}
+                                max={maxMonths}
+                                value={monthsSliderValue}
+                                onChange={(e) => {
+                                    setMonthsSliderValue(Number(e.target.value));
+                                    calculatePeriod((Number(e.target.value)));
+                                }}
+                                style={{'cursor': "green"}}/>
+                            <Container className={styles.loanPeriodRange}>
+                                <Row>
+                                    <Col className={styles.minPeriod}>{minMonths} měsíců</Col>
+                                    <Col className={styles.maxPeriod}>{maxMonths / 12} let</Col>
+                                </Row>
+                            </Container>
+                        </Form.Group>
+                    </Row>
+                </Container>
             </Col>
 
             <Col md={4}>
-            <Container className={styles.loanInfoBox}>
-                {/*<div as={Col} className="mb-3">*/}
-                <div>Měsíční částka činí: {results.monthlyPayment} Kč</div>
-                <div>Roční úroková sazba: {results.yearlyInterest} %</div>
-                <div>RPSN: {results.RPSN} %</div>
-                <div>Celková splatná částka: {results.overallAmount} Kč</div>
-                {/*</div>*/}
-                <button className={styles.btnApply}>
-                    Chci zažádat o půjčku
-                </button>
-            </Container>
+                <Container className={styles.loanInfoBox}>
+                    <table>
+                        <tbody>
+                        <tr className={styles.tableRow1}>
+                            <td>Měsíční částka:</td>
+                            <td className={styles.tableValues} id={styles.tableMonthPayment}>{results.monthlyPayment?.toLocaleString()} Kč</td>
+                        </tr>
+                        <tr>
+                            <td>Roční úroková sazba:</td>
+                            <td className={styles.tableValues}>{results.yearlyInterest} %</td>
+                        </tr>
+                        <tr>
+                            <td>RPSN:</td>
+                            <td className={styles.tableValues}>{results.RPSN} %</td>
+                        </tr>
+                        <tr>
+                            <td>Celková splatná částka:</td>
+                            <td className={styles.tableValues}>{results.overallAmount?.toLocaleString()} Kč</td>
+                        </tr>
+                        {amountSliderValue > 200000 ? (
+                            <tr>
+                                <td>Fixní poplatek:</td>
+                                <td className={styles.tableValues}>{results.fixedFee} Kč</td>
+                            </tr>) : (<tr className={styles.tableFixedFee}><td></td><td></td></tr>)}
+                        </tbody>
+
+                    </table>
+                    <div className={styles.buttonSection}>
+                    <button className={styles.btnApply}>
+                        Chci zažádat o půjčku
+                    </button>
+                    </div>
+                </Container>
             </Col>
         </Row>
 

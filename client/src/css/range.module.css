@@ -10,6 +10,14 @@
     box-shadow: 5px 5px 3px rgba(128, 128, 128, 0.25);
     padding-left: 20px;
     font-weight: bolder;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.maxAmount,
+.maxPeriod {
+    text-align: right;
+    padding-right: 40px;
 }
 
 .loanInfoBox{
@@ -17,14 +25,40 @@
     background-color: #00843D;
     margin-left: 0;
     color: white;
-    height: 306px;
+    /*height: 400px;*/
     line-height: 2;
     font-weight: bolder;
-    font-size: 16px;
+    font-size: 14px;
+    padding-top: 10px;
 }
 
+table{
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.tableValues{
+    text-align: right;
+    padding-top: 10px;
+}
+
+tr{
+    border-top: white 1px solid;
+}
+
+.tableRow1,
+.tableFixedFee {
+    border-top: none;
+}
+
+#tableMonthPayment{
+    font-size: 20px;
+}
+
+
 .slider {
-    width: 60%;
+    width: 95%;
     display: block;
     /*margin-left: auto;*/
     /*margin-right: auto;*/
@@ -51,9 +85,7 @@
     border: none;
     transition-duration: 0.4s;
     line-height: 0;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 40px;
+    margin: 40px auto 20px auto;
 }
 
 .btnApply:hover{
@@ -61,6 +93,10 @@
     color: white;
     border: white 1px solid;
 }
+
+/*.buttonSection{*/
+
+/*}*/
 
 .amountSliderGroup{
     margin: 10px;
@@ -97,3 +133,4 @@
 .periodSliderGroup{
     margin: 30px 10px 10px 10px;
 }
+
