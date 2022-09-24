@@ -91,7 +91,32 @@ function RequestDashboard() {
           <thead className="thead">
             <tr>
               <th>Typ žadatele</th>
-              <th>Jméno </th>
+              <th>
+                Název firmy{" "}
+                <Icon
+                  onClick={sortSurnameAsc}
+                  size={0.8}
+                  path={mdiArrowUpDropCircleOutline}
+                />
+                <Icon
+                  onClick={sortSurnameDesc}
+                  size={0.8}
+                  path={mdiArrowDownDropCircleOutline}
+                />
+              </th>
+              <th>
+                Jméno{" "}
+                <Icon
+                  onClick={sortSurnameAsc}
+                  size={0.8}
+                  path={mdiArrowUpDropCircleOutline}
+                />
+                <Icon
+                  onClick={sortSurnameDesc}
+                  size={0.8}
+                  path={mdiArrowDownDropCircleOutline}
+                />
+              </th>
               <th>
                 Příjmení
                 <Icon
@@ -118,7 +143,19 @@ function RequestDashboard() {
                   path={mdiArrowDownDropCircleOutline}
                 />
               </th>
-              <th>Doba splácení</th>
+              <th>
+                Doba splácení{" "}
+                <Icon
+                  onClick={sortDataAsc}
+                  size={0.8}
+                  path={mdiArrowUpDropCircleOutline}
+                />
+                <Icon
+                  onClick={sortDataDesc}
+                  size={0.8}
+                  path={mdiArrowDownDropCircleOutline}
+                />
+              </th>
               <th>Stav žádosti</th>
               <th></th>
             </tr>
@@ -132,6 +169,11 @@ function RequestDashboard() {
                     {element.applicantType === "OSVC" && "Podnikatel"}
                     {element.applicantType === "LEGAL_ENTITY" &&
                       "Právnická osoba"}
+                  </td>
+                  <td>
+                    {element.applicantType === "LEGAL_ENTITY"
+                      ? element.companyName
+                      : "-"}
                   </td>
                   <td>{element.name}</td>
                   <td>{element.surname}</td>
