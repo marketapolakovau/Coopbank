@@ -159,20 +159,20 @@ function RequestDashboard() {
               return (
                 <tr>
                   <td>
-                    {element.applicantType === "INDIVIDUAL" && "Fyzická osoba"}
-                    {element.applicantType === "OSVC" && "Podnikatel"}
-                    {element.applicantType === "LEGAL_ENTITY" &&
+                    {element?.applicantType === "INDIVIDUAL" && "Fyzická osoba"}
+                    {element?.applicantType === "OSVC" && "Podnikatel"}
+                    {element?.applicantType === "LEGAL_ENTITY" &&
                       "Právnická osoba"}
                   </td>
                   <td>
-                    {element.applicantType === "LEGAL_ENTITY"
-                      ? element.companyName
+                    {element?.applicantType === "LEGAL_ENTITY"
+                      ? element?.companyName
                       : "-"}
                   </td>
-                  <td>{element.name}</td>
-                  <td>{element.surname}</td>
-                  <td>{element.amount.toLocaleString()} CZK</td>
-                  <td>{element.numOfMonths} měsíců</td>
+                  <td>{element?.name}</td>
+                  <td>{element?.surname}</td>
+                  <td>{element?.amount?.toLocaleString()} CZK</td>
+                  <td>{element?.numOfMonths} měsíců</td>
                   <td>
                     {" "}
                     {element?.status === "APPROVED"
