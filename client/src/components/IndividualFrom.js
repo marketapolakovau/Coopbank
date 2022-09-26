@@ -66,6 +66,7 @@ function IndividualForm() {
 
     result.address.descNumber = +result.address.descNumber;
     result.address.indicativeNumber = +result.address.indicativeNumber;
+    result.address.postalCode = result.address.postalCode.replace(/\s/g, "");
     result.address.postalCode = +result.address.postalCode;
     result.phone = prefixData + phoneNumData;
 
@@ -281,14 +282,15 @@ function IndividualForm() {
         <br />
         <Row>
           <Col>
-            <Button
-              size="lg"
-              variant="success"
+            <button
+              noValidate
+              validated={validated}
               type="submit"
-              // onClick={handleShowModal}
+              className="primary-button"
+              // onClick={(e) => handleSubmit(e)}
             >
               Zažádat o půjčku
-            </Button>
+            </button>
           </Col>
           <Col>
             <p>
@@ -299,20 +301,24 @@ function IndividualForm() {
         </Row>
       </Form>
       <Modal show={showModal} centered>
-        <Modal.Header style={{ backgroundColor: "#00843D" }}>
-          <Modal.Title style={{ color: "#fff" }}>Potvrzeni</Modal.Title>
+        <Modal.Header className="modalHeader">
+          <Modal.Title className="modalHeading">Potvrzení</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>
+          <p className="modalText">
             Děkujeme za využití služeb Coopbank. Přehled svojí žádosti si můžete
             prohlédnout na nasledujícím odkazu.
           </p>
-          <Link to={`/request/${newRequestData?.id}`}>
-            <Button variant="success">Přehled</Button>
-          </Link>
+          <div className="modalBtnContainer">
+            <Link to={`/request/${newRequestData?.id}`}>
+              <Button variant="success">Přehled Váší žádosti</Button>
+            </Link>
+          </div>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary">Hlavní stranka</Button>
+        <Modal.Footer className="modalHomeBtn">
+          <Link to={`/`}>
+            <Button variant="secondary">Hlavní stranka</Button>
+          </Link>
         </Modal.Footer>
       </Modal>
     </div>

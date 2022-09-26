@@ -1,0 +1,50 @@
+.formMain {
+  background-color: #00843d;
+}
+
+.headingPrimary {
+  padding-top: 32px;
+  color: #fff;
+}
+
+.headingSecondary {
+  color: #fff;
+}
+
+.maxWidth {
+  max-width: 720px;
+}
+
+.formSelect {
+  max-width: 300px;
+}
+
+.marginTop {
+  margin-top: 50px;
+}
+
+.modalHeader {
+  background-color: #00843d;
+  display: flex;
+  justify-content: center;
+}
+
+.modalHeading {
+  color: #fff;
+  padding: 16px;
+}
+
+.modalText {
+  padding: 16px;
+}
+
+.modalBtnContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.modalHomeBtn {
+  display: flex;
+  justify-content: left;
+  padding: 16px;
+}
