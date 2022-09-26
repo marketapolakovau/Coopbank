@@ -5,7 +5,6 @@ const UserContext = createContext();
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState();
-  console.log(user);
   const loginUser = (loginData) => {
     fetch("http://localhost:8000/login", {
       headers: {
@@ -49,10 +48,7 @@ export function UserProvider({ children }) {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch((e) => console.log(e));
+    });
   };
 
   const cancelRequest = (id) => {

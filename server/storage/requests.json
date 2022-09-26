@@ -19,7 +19,7 @@
       "city": "Duis",
       "postalCode": 11111
     },
-    "status": "CANCELLED",
+    "status": "PENDING",
     "id": "Pm8MtixTFX",
     "created": "Wed Mar 25 2015 01:00:00 GMT+0100"
   },
@@ -43,8 +43,7 @@
       "city": "Totam",
       "postalCode": 777777
     },
-
-    "status": "APPROVED",
+    "status": "PENDING",
     "id": "wiVXhN73Mt",
     "created": "Sat Sep 17 2022 19:31:42 GMT+0200"
   },
@@ -58,7 +57,7 @@
     "phone": "+420111222345",
     "IC": "123466434",
     "companyName": "Trees and Such",
-    "amount": 13000,
+    "amount": 1000000,
     "numOfMonths": 12,
     "position": "generální ředitel",
     "address": {
@@ -68,7 +67,7 @@
       "city": "Totam",
       "postalCode": 777777
     },
-    "status": "APPROVED",
+    "status": "PENDING",
     "id": "wiVXhN73fR",
     "created": "Sat Sep 17 2022 19:31:42 GMT+0200"
   }

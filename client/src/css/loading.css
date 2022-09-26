@@ -1,4 +1,8 @@
 .loading-container {
-  padding-bottom: 50px;
-  margin-top: 100px;
+  padding-left: 10px;
+  margin: 100px auto;
+  width: 25%;
+  border: 1px solid;
+  box-shadow: 3px 3px #888888a5;
+  border-radius: 3px;
 }
