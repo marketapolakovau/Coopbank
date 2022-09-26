@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Form, Table, Row, Col, Container} from "react-bootstrap";
 import styles from '../css/range.module.css'
 import PersonalDataForm from "./PersonalDataForm";
@@ -16,6 +16,8 @@ function Calculator() {
     const [results, setResults] = useState({})
 
     const [loanData, setLoanData] = useState(false)
+
+    const formRef = useRef();
 
     useEffect(() => {
         async function calculate() {
@@ -82,17 +84,6 @@ function Calculator() {
     };
 
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     e.stopPropagation();
-    //
-    //     const loanData = {
-    //         ... results
-    //     }
-    //
-    //     console.log({'info o pujcce': loanData})
-    // }
-
 
     return (
         <div>
@@ -145,6 +136,7 @@ function Calculator() {
                                 onChange={(e) => {
                                     setMonthsSliderValue(Number(e.target.value));
                                     calculatePeriod((Number(e.target.value)));
+                                    // setLoanData(false)
                                 }}
                                 style={{'cursor': "green"}}/>
                             <Container className={styles.loanPeriodRange}>
@@ -168,11 +160,11 @@ function Calculator() {
                         </tr>
                         <tr>
                             <td>Roční úroková sazba:</td>
-                            <td className={styles.tableValues}>{results.yearlyInterest} %</td>
+                            <td className={styles.tableValues}>{results.yearlyInterest?.toFixed(1)} %</td>
                         </tr>
                         <tr>
                             <td>RPSN:</td>
-                            <td className={styles.tableValues}>{results.RPSN} %</td>
+                            <td className={styles.tableValues}>{results.RPSN?.toFixed(1)} %</td>
                         </tr>
                         <tr>
                             <td>Celková splatná částka:</td>
@@ -181,30 +173,31 @@ function Calculator() {
                         {amountSliderValue > 200000 ? (
                             <tr>
                                 <td>Fixní poplatek:</td>
-                                <td className={styles.tableValues}>{results.fixedFee} Kč</td>
+                                <td className={styles.tableValues}>{results.fixedFee?.toLocaleString()} Kč</td>
                             </tr>) : (<tr className={styles.tableFixedFee}><td> </td><td> </td></tr>)}
                         </tbody>
 
                     </table>
                     <div className={styles.buttonSection}>
                     <button className={styles.btnApply}
-                            onClick={()=>{setLoanData(!loanData)}}>
+                            onClick={()=>{setLoanData(!loanData)
+                                console.log(formRef.current);
+                            }
+                    }>
                         Chci zažádat o půjčku
                     </button>
-
-
-
-                    </div>
+          </div>
                 </Container>
             </Col>
         </Row>
 
+            <div ref={formRef}>
             {loanData === true &&
                 <PersonalDataForm
                 amount={amountSliderValue}
                 numOfMonths={monthsSliderValue}/>
             }
-
+            </div>
 
         </div>
 
