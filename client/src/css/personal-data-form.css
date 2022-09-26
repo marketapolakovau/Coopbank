@@ -48,3 +48,7 @@
   justify-content: left;
   padding: 16px;
 }
+
+.borderRadius {
+  border-radius: 0px;
+}
