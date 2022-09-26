@@ -35,6 +35,7 @@ function Calculator() {
             const data = await res.json();
             setResults(data)
         }
+        console.log(results)
 
         calculate();
     }, [amountSliderValue, monthsSliderValue])
@@ -200,9 +201,9 @@ function Calculator() {
 
             {loanData === true &&
                 <PersonalDataForm
-                amount={results.amount}
-                numOfMonths={results.numOfMonths}
-            />}
+                amount={amountSliderValue}
+                numOfMonths={monthsSliderValue}/>
+            }
 
 
         </div>
