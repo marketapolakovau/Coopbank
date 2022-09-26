@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Form, Table, Row, Col, Container} from "react-bootstrap";
 import styles from '../css/range.module.css'
-
+import PersonalDataForm from "./PersonalDataForm";
 
 function Calculator() {
     const minAmount = 5000;
@@ -14,6 +14,8 @@ function Calculator() {
     const [periods, setPeriods] = useState()
 
     const [results, setResults] = useState({})
+
+    const [loanData, setLoanData] = useState()
 
     useEffect(() => {
         async function calculate() {
@@ -29,6 +31,7 @@ function Calculator() {
                 },
                 body: JSON.stringify(payload)
             });
+            console.log(payload)
             const data = await res.json();
             setResults(data)
         }
@@ -37,28 +40,7 @@ function Calculator() {
     }, [amountSliderValue, monthsSliderValue])
 
 
-    // function monthWord () {
-    //     let msgMonths = '';
-    //     if ((monthsSliderValue%12) === 1) {
-    //         msgMonths = 'měsíc'
-    //     } else if ((monthsSliderValue%12) >= 2 || (monthsSliderValue%12) <= 4) {
-    //         msgMonths = 'měsíce'
-    //     } else {
-    //         msgMonths = 'měsíců'
-    //     }
-    //     monthWord()
-    // }
 
-
-    // console.log(monthWord(2))
-    //
-    // function yearWord () {
-    //     let msgYears = '';
-    //     if(Math.floor(monthsSliderValue / 12)){
-    //
-    //     }
-    //
-    // }
 
     // const period = monthsSliderValue;
     const calculatePeriod = monthCount => {
@@ -99,6 +81,18 @@ function Calculator() {
     };
 
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //
+    //     const loanData = {
+    //         ... results
+    //     }
+    //
+    //     console.log({'info o pujcce': loanData})
+    // }
+
+
     return (
         <Row className={styles.calc} xs={1} md={2}>
             <Col md={8}>
@@ -130,19 +124,20 @@ function Calculator() {
                             <Row>
                                 <Form.Label className={styles.loanPeriodText}>Doba splácení </Form.Label>
 
-                                {monthsSliderValue % 12 === 0 ?
+                                {monthsSliderValue === minMonths ?
+                                    (<div className={styles.loanPeriod}>{periods?.months} {periods?.msgMonths}</div>):
+                                    monthsSliderValue % 12 === 0 ?
                                     (<div className={styles.loanPeriod}>{periods?.years} {periods?.msgYears}</div>) :
                                     (<div className={styles.loanPeriod}>
                                         {periods?.years || ''} {periods?.msgYears} {periods?.months} {periods?.msgMonths}
                                     </div>)}
-
 
                             </Row>
                             <Form.Range
                                 className={styles.slider}
                                 min={minMonths}
                                 max={maxMonths}
-                                value={monthsSliderValue}
+                                value={monthsSliderValue === 6 ? minMonths : monthsSliderValue}
                                 onChange={(e) => {
                                     setMonthsSliderValue(Number(e.target.value));
                                     calculatePeriod((Number(e.target.value)));
@@ -183,7 +178,7 @@ function Calculator() {
                             <tr>
                                 <td>Fixní poplatek:</td>
                                 <td className={styles.tableValues}>{results.fixedFee} Kč</td>
-                            </tr>) : (<tr className={styles.tableFixedFee}><td></td><td></td></tr>)}
+                            </tr>) : (<tr className={styles.tableFixedFee}><td> </td><td> </td></tr>)}
                         </tbody>
 
                     </table>
@@ -191,6 +186,14 @@ function Calculator() {
                     <button className={styles.btnApply}>
                         Chci zažádat o půjčku
                     </button>
+
+                        <PersonalDataForm
+                            amount={payload.amount}
+                            numOfMonths={payload.numOfMonths}
+                        />
+
+
+
                     </div>
                 </Container>
             </Col>
