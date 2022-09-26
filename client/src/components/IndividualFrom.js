@@ -170,7 +170,7 @@ function IndividualForm() {
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní e-mail
+                Vyplňte platný e-mail
               </Form.Control.Feedback>
             </FloatingLabel>
           </Col>
