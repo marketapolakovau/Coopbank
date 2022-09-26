@@ -1,17 +1,10 @@
 import React, { useState } from "react";
-import {
-  Form,
-  Row,
-  Col,
-  FloatingLabel,
-  Button,
-  InputGroup,
-  Modal,
-} from "react-bootstrap";
+import { Form, Row, Col, InputGroup, Modal, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import CompanyPositionMap from "./CompanyPositionMap";
+import styles from "../css/personal-data-form.css";
 
-function LegalEntityForm() {
+function LegalEntityForm(props) {
   const [newRequestData, setNewRequestData] = useState();
   const [showModal, setShowModal] = useState(false);
   const [validated, setValidated] = useState(false);
@@ -27,8 +20,8 @@ function LegalEntityForm() {
     IC: "",
     position: "",
     companyName: "",
-    amount: 10000,
-    numOfMonths: 8,
+    amount: null,
+    numOfMonths: null,
     address: {},
   });
   const [addressData, setAddressData] = useState({
@@ -66,11 +59,13 @@ function LegalEntityForm() {
 
     const result = { ...legalEntityFormData, address: addressData };
 
+    result.amount = props.amount;
+    result.numOfMonths = props.numOfMonths;
     result.address.descNumber = +result.address.descNumber;
     result.address.indicativeNumber = +result.address.indicativeNumber;
+    // result.address.postalCode = result.address.postalCode.replace(/\s/g, "");
     result.address.postalCode = +result.address.postalCode;
     result.phone = prefixData + phoneNumData;
-    result.position = positionName;
 
     setRequestAddCall({ state: "pending" });
 
@@ -88,9 +83,8 @@ function LegalEntityForm() {
       console.log(data);
       setRequestAddCall({ state: "success", data });
       setNewRequestData(data);
+      handleShowModal();
     }
-
-    handleShowModal();
   };
 
   return (
@@ -103,7 +97,8 @@ function LegalEntityForm() {
       >
         <Row className="g-2 mb-3">
           <Col>
-            <FloatingLabel controlId="companyName" label="Název firmy">
+            <Form.Group>
+              <Form.Label controlId="companyName">Název firmy</Form.Label>
               <Form.Control
                 type="text"
                 name="companyName"
@@ -111,10 +106,10 @@ function LegalEntityForm() {
                 required
                 onChange={handleChange}
               />
-              <Form.Control.Feedback type="invalid" onChange={handleChange}>
+              <Form.Control.Feedback type="invalid">
                 Název firmy je vyžadovaný
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
           <Col>
             <Form.Select onChange={(e) => setPositionName(e.target.value)}>
@@ -122,197 +117,225 @@ function LegalEntityForm() {
             </Form.Select>
           </Col>
         </Row>
-        <Row className="g-2 mb-3">
+        <Row className="g-3 mb-3">
           <Col>
-            <FloatingLabel controlId="name" label="Jméno">
+            <Form.Group>
+              <Form.Label controlId="name">Jméno</Form.Label>
               <Form.Control
                 type="text"
                 name="name"
+                className="borderRadius"
                 value={legalEntityFormData.name}
                 required
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
-                Jméno je vyžadované
+                Zadejte jméno
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
           <Col>
-            <FloatingLabel controlId="surname" label="Příjmení">
+            <Form.Group>
+              <Form.Label controlId="surname">Příjmení</Form.Label>
               <Form.Control
                 type="text"
                 name="surname"
+                className="borderRadius"
                 value={legalEntityFormData.surname}
                 required
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
-                Příjmení je vyžadované
+                Zadejte příjmení
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
         </Row>
-        <Row className="g-2 mb-3">
+        <Row className="g-3 mb-3">
           <Col>
-            <FloatingLabel controlId="nationality" label="Státní příslušnost">
+            <Form.Group>
+              <Form.Label controlId="nationality">
+                Státní příslušnost
+              </Form.Label>
               <Form.Control
                 type="text"
                 name="nationality"
+                className="borderRadius"
                 value={legalEntityFormData.nationality}
                 required
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
-                Státní příslušnost je vyžadovaná
+                Zadejte státní příslušnost
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
           <Col>
-            <FloatingLabel controlId="IC" label="IČO">
+            <Form.Group>
+              <Form.Label controlId="IC">IČO</Form.Label>
               <Form.Control
                 type="text"
                 name="IC"
+                pattern="^[0-9]{8}$"
+                className="borderRadius"
                 value={legalEntityFormData.IC}
                 required
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
-                IČO je vyžadované
+                Zadejte IČO ve validním formátu
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
         </Row>
-        <Row className="g-2 mb-3">
+        <Row className="g-3 mb-3">
           <Col>
-            <FloatingLabel controlId="email" label="E-mail">
+            <Form.Group>
+              <Form.Label controlId="email">E-mail</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
+                className="borderRadius"
                 value={legalEntityFormData.email}
                 required
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní e-mail
+                Zadejte e-mail ve validním formátu
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
           <Col>
-            <InputGroup>
-              <Form.Select
-                style={{ maxWidth: "120px" }}
-                onChange={(e) => setPrefixData(e.target.value)}
-              >
-                <option value="+420">+420</option>
-                <option value="+421">+421</option>
-              </Form.Select>
-              <FloatingLabel controlId="phoneNum" label="Telefon">
+            <Form.Group>
+              <Form.Label controlId="phoneNum">Telefon</Form.Label>
+              <InputGroup>
+                <Form.Select
+                  className="borderRadius"
+                  style={{ maxWidth: "120px" }}
+                  onChange={(e) => setPrefixData(e.target.value)}
+                >
+                  <option value="+420">+420</option>
+                  <option value="+421">+421</option>
+                </Form.Select>
+
                 <Form.Control
                   type="text"
-                  pattern="\d{9}"
+                  pattern="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$"
                   name="phoneNum"
                   value={phoneNumData}
                   required
                   onChange={(e) => setPhoneNumData(e.target.value)}
                 />
                 <Form.Control.Feedback type="invalid">
-                  Vyplňte platní telefonní číslo
+                  Zadejte telefonní číslo ve validním formátu
                 </Form.Control.Feedback>
-              </FloatingLabel>
-            </InputGroup>
+              </InputGroup>
+            </Form.Group>
           </Col>
         </Row>
-        <Row className="mb-3 g-2">
+        <Row className="mb-3 g-3">
           <Col xs={6}>
-            <FloatingLabel controlId="street" label="Ulice">
+            <Form.Group>
+              <Form.Label controlId="street">Ulice</Form.Label>
               <Form.Control
                 type="text"
                 name="street"
+                className="borderRadius"
                 value={addressData.street}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Ulice je vyžadovaná
+                Zadejte ulici
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
           <Col>
-            <FloatingLabel controlId="descNumber" label="Číslo popisné">
+            <Form.Group>
+              <Form.Label controlId="descNumber">Číslo popisné</Form.Label>
               <Form.Control
                 type="text"
                 pattern="^\d[0-9a-zA-Z]*$"
                 name="descNumber"
+                className="borderRadius"
                 value={addressData.descNumber}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní popisné číslo
+                Zadejte číslo popisné ve validním formátu
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
           <Col>
-            <FloatingLabel
-              controlId="indicativeNumber"
-              label="Číslo orientační"
-            >
+            <Form.Group>
+              <Form.Label controlId="indicativeNumber">
+                Číslo orientační
+              </Form.Label>
               <Form.Control
                 type="text"
                 pattern="^\d[0-9a-zA-Z]*$"
                 name="indicativeNumber"
+                className="borderRadius"
                 value={addressData.indicativeNumber}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní orientační číslo
+                Zadejte číslo orientační ve validním formátu
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
         </Row>
-        <Row className="g-2 mb-3">
+        <Row className="g-3 mb-3">
           <Col>
-            <FloatingLabel controlId="city" label="Obec">
+            <Form.Group>
+              <Form.Label controlId="city">Obec</Form.Label>
               <Form.Control
                 type="text"
                 name="city"
+                className="borderRadius"
                 value={addressData.city}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Obec je vyžadovaná
+                Zadejte obec
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
           <Col>
-            <FloatingLabel controlId="postalCode" label="PSČ">
+            <Form.Group>
+              <Form.Label controlId="postalCode">PSČ</Form.Label>
               <Form.Control
                 type="text"
                 pattern="\d{3}[ ]?\d{2}"
                 name="postalCode"
+                className="borderRadius"
                 value={addressData.postalCode}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní PSČ
+                Zadejte PSČ ve validním formátu
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
         </Row>
         <br />
+        {requestAddCall?.error && (
+          <div>
+            <Alert key="danger" variant="danger">
+              <Alert.Heading>Error 400 (Bad Request)</Alert.Heading>
+              <p> {requestAddCall.error.errorMessage}</p>
+            </Alert>
+          </div>
+        )}
         <Row>
           <Col>
-            <Button
-              size="lg"
-              variant="success"
-              type="submit"
-              // onClick={handleShowModal}
-            >
+            <button type="submit" className="primary-button">
               Zažádat o půjčku
-            </Button>
+            </button>
           </Col>
           <Col>
             <p>
@@ -323,20 +346,24 @@ function LegalEntityForm() {
         </Row>
       </Form>
       <Modal show={showModal} centered>
-        <Modal.Header style={{ backgroundColor: "#00843D" }}>
-          <Modal.Title style={{ color: "#fff" }}>Potvrzeni</Modal.Title>
+        <Modal.Header className="modalHeader">
+          <Modal.Title className="modalHeading">Potvrzení</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>
+          <p className="modalText">
             Děkujeme za využití služeb Coopbank. Přehled svojí žádosti si můžete
             prohlédnout na nasledujícím odkazu.
           </p>
-          <Link to={`/request/${newRequestData?.id}`}>
-            <Button variant="success">Přehled</Button>
-          </Link>
+          <div className="modalBtnContainer">
+            <Link to={`/request/${newRequestData?.id}`}>
+              <button className="primary-button">Přehled Váší žádosti</button>
+            </Link>
+          </div>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary">Hlavní stranka</Button>
+        <Modal.Footer className="modalHomeBtn">
+          <Link to={`/`}>
+            <button className="outline-button">Hlavní stranka</button>
+          </Link>
         </Modal.Footer>
       </Modal>
     </div>
@@ -344,66 +371,3 @@ function LegalEntityForm() {
 }
 
 export default LegalEntityForm;
-
-{
-  /* <Row className="g-2 mb-3">
-  <Col>
-    <FloatingLabel controlId="companyName" label="Název firmy">
-      <Form.Control
-        type="text"
-        name="companyName"
-        value={legalEntityFormData.companyName}
-        required
-        onChange={handleChange}
-      />
-      <Form.Control.Feedback type="invalid" onChange={handleChange}>
-        Název firmy je vyžadovaný
-      </Form.Control.Feedback>
-    </FloatingLabel>
-  </Col>
-  <Col>
-    <Form.Select>
-      <CompanyPositionMap />
-    </Form.Select>
-  </Col>
-</Row>; */
-}
-
-// členka představenstva
-// členka správní rady
-// členka výboru
-// člen představenstva
-// člen správní rady
-// člen výboru
-// ekonom
-// ekonomka
-// generální ředitel
-// generální ředitelka
-// jednatel
-// jednatelka
-// místopředseda
-// místopředsedkyně
-// místostarosta
-// místostarostka
-// předseda
-// předseda představenstva
-// předseda správní rady
-// předsedkyně
-// předsedkyně představenstva
-// předsedkyně správní rady
-// primátor
-// primátorka
-// prokurista
-// prokuristka
-// ředitel
-// ředitelka
-// společník
-// starosta
-// starostka
-// statutární ředitel
-// statutární ředitelka
-// účetní
-// zástupce
-// zástupkyně
-// zplnomocněná
-// zplnomocněný

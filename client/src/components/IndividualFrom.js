@@ -1,16 +1,9 @@
 import React, { useState } from "react";
-import {
-  Form,
-  Row,
-  Col,
-  FloatingLabel,
-  Button,
-  InputGroup,
-  Modal,
-} from "react-bootstrap";
+import { Form, Row, Col, InputGroup, Modal, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import styles from "../css/personal-data-form.css";
 
-function IndividualForm() {
+function IndividualForm(props) {
   const [newRequestData, setNewRequestData] = useState();
   const [showModal, setShowModal] = useState(false);
   const [validated, setValidated] = useState(false);
@@ -26,8 +19,8 @@ function IndividualForm() {
     IC: "",
     position: "",
     companyName: "",
-    amount: 10000,
-    numOfMonths: 8,
+    amount: null,
+    numOfMonths: null,
     address: {},
   });
   const [addressData, setAddressData] = useState({
@@ -52,6 +45,10 @@ function IndividualForm() {
 
   const handleShowModal = () => setShowModal(true);
 
+  // const psc = "170 00";
+  // const fixedPsc = psc.replace(/\s/g, "");
+  // console.log(fixedPsc);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -64,9 +61,11 @@ function IndividualForm() {
 
     const result = { ...individualFormData, address: addressData };
 
+    result.amount = props.amount;
+    result.numOfMonths = props.numOfMonths;
     result.address.descNumber = +result.address.descNumber;
     result.address.indicativeNumber = +result.address.indicativeNumber;
-    result.address.postalCode = result.address.postalCode.replace(/\s/g, "");
+    // result.address.postalCode = result.address.postalCode.replace(/\s/g, "");
     result.address.postalCode = +result.address.postalCode;
     result.phone = prefixData + phoneNumData;
 
@@ -86,9 +85,8 @@ function IndividualForm() {
       console.log(data);
       setRequestAddCall({ state: "success", data });
       setNewRequestData(data);
+      handleShowModal();
     }
-
-    handleShowModal();
   };
 
   return (
@@ -99,196 +97,225 @@ function IndividualForm() {
         id={"form"}
         onSubmit={(e) => handleSubmit(e)}
       >
-        <Row className="g-2 mb-3">
+        <Row className="g-3 mb-3">
           <Col>
-            <FloatingLabel controlId="name" label="Jméno">
+            <Form.Group>
+              <Form.Label controlId="name">Jméno</Form.Label>
               <Form.Control
                 type="text"
                 name="name"
+                className="borderRadius"
                 value={individualFormData.name}
                 required
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
-                Jméno je vyžadované
+                Zadejte jméno
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
           <Col>
-            <FloatingLabel controlId="surname" label="Příjmení">
+            <Form.Group>
+              <Form.Label controlId="surname">Příjmení</Form.Label>
               <Form.Control
                 type="text"
                 name="surname"
+                className="borderRadius"
                 value={individualFormData.surname}
                 required
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
-                Příjmení je vyžadované
+                Zadejte příjmení
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
         </Row>
-        <Row className="g-2 mb-3">
+        <Row className="g-3 mb-3">
           <Col>
-            <FloatingLabel controlId="nationality" label="Státní příslušnost">
+            <Form.Group>
+              <Form.Label controlId="nationality">
+                Státní příslušnost
+              </Form.Label>
               <Form.Control
                 type="text"
                 name="nationality"
+                className="borderRadius"
                 value={individualFormData.nationality}
                 required
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
-                Státní příslušnost je vyžadovaná
+                Zadejte státní příslušnost
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
           <Col>
-            <FloatingLabel controlId="birthNum" label="Rodní číslo">
+            <Form.Group>
+              <Form.Label controlId="birthNum">Rodní číslo</Form.Label>
               <Form.Control
                 type="text"
                 name="birthNum"
+                className="borderRadius"
+                pattern="[0-9]{2}[0,1,5][0-9][0-9]{2}/?[0-9]{4}"
                 value={individualFormData.birthNum}
                 required
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
-                Rodní číslo je vyžadované
+                Zadejte rodní číslo ve validním formátu
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
         </Row>
-        <Row className="g-2 mb-3">
+        <Row className="g-3 mb-3">
           <Col>
-            <FloatingLabel controlId="email" label="E-mail">
+            <Form.Group>
+              <Form.Label controlId="email">E-mail</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
+                className="borderRadius"
                 value={individualFormData.email}
                 required
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platný e-mail
+
+                Zadejte e-mail ve validním formátu
+
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
           <Col>
-            <InputGroup>
-              <Form.Select
-                style={{ maxWidth: "120px" }}
-                onChange={(e) => setPrefixData(e.target.value)}
-              >
-                <option value="+420">+420</option>
-                <option value="+421">+421</option>
-              </Form.Select>
-              <FloatingLabel controlId="phoneNum" label="Telefon">
+            <Form.Group>
+              <Form.Label controlId="phoneNum">Telefon</Form.Label>
+              <InputGroup>
+                <Form.Select
+                  className="borderRadius"
+                  style={{ maxWidth: "120px" }}
+                  onChange={(e) => setPrefixData(e.target.value)}
+                >
+                  <option value="+420">+420</option>
+                  <option value="+421">+421</option>
+                </Form.Select>
+
                 <Form.Control
                   type="text"
-                  pattern="\d{9}"
+                  pattern="^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$"
                   name="phoneNum"
                   value={phoneNumData}
                   required
                   onChange={(e) => setPhoneNumData(e.target.value)}
                 />
                 <Form.Control.Feedback type="invalid">
-                  Vyplňte platní telefonní číslo
+                  Zadejte telefonní číslo ve validním formátu
                 </Form.Control.Feedback>
-              </FloatingLabel>
-            </InputGroup>
+              </InputGroup>
+            </Form.Group>
           </Col>
         </Row>
-        <Row className="mb-3 g-2">
+        <Row className="mb-3 g-3">
           <Col xs={6}>
-            <FloatingLabel controlId="street" label="Ulice">
+            <Form.Group>
+              <Form.Label controlId="street">Ulice</Form.Label>
               <Form.Control
                 type="text"
                 name="street"
+                className="borderRadius"
                 value={addressData.street}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Ulice je vyžadovaná
+                Zadejte ulici
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
           <Col>
-            <FloatingLabel controlId="descNumber" label="Číslo popisné">
+            <Form.Group>
+              <Form.Label controlId="descNumber">Číslo popisné</Form.Label>
               <Form.Control
                 type="text"
                 pattern="^\d[0-9a-zA-Z]*$"
                 name="descNumber"
+                className="borderRadius"
                 value={addressData.descNumber}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní popisné číslo
+                Zadejte číslo popisné ve validním formátu
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
           <Col>
-            <FloatingLabel
-              controlId="indicativeNumber"
-              label="Číslo orientační"
-            >
+            <Form.Group>
+              <Form.Label controlId="indicativeNumber">
+                Číslo orientační
+              </Form.Label>
               <Form.Control
                 type="text"
                 pattern="^\d[0-9a-zA-Z]*$"
                 name="indicativeNumber"
+                className="borderRadius"
                 value={addressData.indicativeNumber}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní orientační číslo
+                Zadejte číslo orientační ve validním formátu
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
         </Row>
-        <Row className="g-2 mb-3">
+        <Row className="g-3 mb-3">
           <Col>
-            <FloatingLabel controlId="city" label="Obec">
+            <Form.Group>
+              <Form.Label controlId="city">Obec</Form.Label>
               <Form.Control
                 type="text"
                 name="city"
+                className="borderRadius"
                 value={addressData.city}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Obec je vyžadovaná
+                Zadejte obec
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
           <Col>
-            <FloatingLabel controlId="postalCode" label="PSČ">
+            <Form.Group>
+              <Form.Label controlId="postalCode">PSČ</Form.Label>
               <Form.Control
                 type="text"
                 pattern="\d{3}[ ]?\d{2}"
                 name="postalCode"
+                className="borderRadius"
                 value={addressData.postalCode}
                 required
                 onChange={handleChangeAddress}
               />
               <Form.Control.Feedback type="invalid">
-                Vyplňte platní PSČ
+                Zadejte PSČ ve validním formátu
               </Form.Control.Feedback>
-            </FloatingLabel>
+            </Form.Group>
           </Col>
         </Row>
         <br />
+        {requestAddCall?.error && (
+          <div>
+            <Alert key="danger" variant="danger">
+              <Alert.Heading>Error 400 (Bad Request)</Alert.Heading>
+              <p> {requestAddCall.error.errorMessage}</p>
+            </Alert>
+          </div>
+        )}
         <Row>
           <Col>
-            <button
-              noValidate
-              validated={validated}
-              type="submit"
-              className="primary-button"
-              // onClick={(e) => handleSubmit(e)}
-            >
+            <button type="submit" className="primary-button">
               Zažádat o půjčku
             </button>
           </Col>
@@ -311,13 +338,13 @@ function IndividualForm() {
           </p>
           <div className="modalBtnContainer">
             <Link to={`/request/${newRequestData?.id}`}>
-              <Button variant="success">Přehled Váší žádosti</Button>
+              <button className="primary-button">Přehled Váší žádosti</button>
             </Link>
           </div>
         </Modal.Body>
         <Modal.Footer className="modalHomeBtn">
           <Link to={`/`}>
-            <Button variant="secondary">Hlavní stranka</Button>
+            <button className="outline-button">Hlavní stranka</button>
           </Link>
         </Modal.Footer>
       </Modal>
