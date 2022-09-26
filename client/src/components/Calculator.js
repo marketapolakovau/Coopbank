@@ -33,16 +33,18 @@ function Calculator() {
                 },
                 body: JSON.stringify(payload)
             });
-            console.log(payload)
             const data = await res.json();
             setResults(data)
         }
-        console.log(results)
+
 
         calculate();
     }, [amountSliderValue, monthsSliderValue])
 
 
+    useEffect(() => {
+        calculatePeriod(minMonths)
+    }, [])
 
 
     // const period = monthsSliderValue;
@@ -83,127 +85,131 @@ function Calculator() {
         setPeriods({years, msgYears, months, msgMonths})
     };
 
-
-
     return (
         <div>
-        <Row className={styles.calc} xs={1} md={2}>
-            <Col md={8}>
-                <Container className={styles.slidersContainer}>
-                    <Row>
-                        <Form.Group className={styles.amountSliderGroup}>
-                            <Row>
-                                <Form.Label className={styles.loanAmountText}> Chci si půjčit </Form.Label>
-                                <div className={styles.loanAmount}>{amountSliderValue.toLocaleString()} Kč</div>
-                            </Row>
-                            <Form.Range
-                                className={styles.slider}
-                                min={minAmount}
-                                max={maxAmount}
-                                step={amountSliderValue <= 50000 ? 1000 : 5000}
-                                value={amountSliderValue}
-                                onChange={e => {setAmountSliderValue(Number(e.target.value))
-                                    setLoanData(false)
-                                }}/>
-                            <Container className={styles.loanAmountRange}>
+            <Row className={styles.calc} xs={1} md={2}>
+                <Col md={8}>
+                    <Container className={styles.slidersContainer}>
+                        <Row>
+                            <Form.Group className={styles.amountSliderGroup}>
                                 <Row>
-                                    <Col className={styles.minAmount}>{minAmount.toLocaleString()} Kč</Col>
-                                    <Col className={styles.maxAmount}>{maxAmount.toLocaleString()} Kč</Col>
+                                    <Form.Label className={styles.loanAmountText}> Chci si půjčit </Form.Label>
+                                    <div className={styles.loanAmount}>{amountSliderValue.toLocaleString()} Kč</div>
                                 </Row>
-                            </Container>
-                        </Form.Group>
-                    </Row>
+                                <Form.Range
+                                    className={styles.slider}
+                                    min={minAmount}
+                                    max={maxAmount}
+                                    step={amountSliderValue <= 50000 ? 1000 : 5000}
+                                    value={amountSliderValue}
+                                    onChange={e => {
+                                        setAmountSliderValue(Number(e.target.value))
+                                        setLoanData(false)
+                                    }}/>
+                                <Container className={styles.loanAmountRange}>
+                                    <Row>
+                                        <Col className={styles.minAmount}>{minAmount.toLocaleString()} Kč</Col>
+                                        <Col className={styles.maxAmount}>{maxAmount.toLocaleString()} Kč</Col>
+                                    </Row>
+                                </Container>
+                            </Form.Group>
+                        </Row>
 
-                    <Row>
-                        <Form.Group className={styles.periodSliderGroup}>
-                            <Row>
-                                <Form.Label className={styles.loanPeriodText}>Doba splácení </Form.Label>
-
-                                {monthsSliderValue === minMonths ?
-                                    (<div className={styles.loanPeriod}>{periods?.months} {periods?.msgMonths}</div>):
-                                    monthsSliderValue % 12 === 0 ?
-                                    (<div className={styles.loanPeriod}>{periods?.years} {periods?.msgYears}</div>) :
-                                    (<div className={styles.loanPeriod}>
-                                        {periods?.years || ''} {periods?.msgYears} {periods?.months} {periods?.msgMonths}
-                                    </div>)}
-
-                            </Row>
-                            <Form.Range
-                                className={styles.slider}
-                                min={minMonths}
-                                max={maxMonths}
-                                value={monthsSliderValue === 6 ? minMonths : monthsSliderValue}
-                                onChange={(e) => {
-                                    setMonthsSliderValue(Number(e.target.value));
-                                    calculatePeriod((Number(e.target.value)));
-                                    // setLoanData(false)
-                                }}
-                                style={{'cursor': "green"}}/>
-                            <Container className={styles.loanPeriodRange}>
+                        <Row>
+                            <Form.Group className={styles.periodSliderGroup}>
                                 <Row>
-                                    <Col className={styles.minPeriod}>{minMonths} měsíců</Col>
-                                    <Col className={styles.maxPeriod}>{maxMonths / 12} let</Col>
-                                </Row>
-                            </Container>
-                        </Form.Group>
-                    </Row>
-                </Container>
-            </Col>
+                                    <Form.Label className={styles.loanPeriodText}>Doba splácení </Form.Label>
 
-            <Col md={4}>
-                <Container className={styles.loanInfoBox}>
-                    <table>
-                        <tbody>
-                        <tr className={styles.tableRow1}>
-                            <td>Měsíční částka:</td>
-                            <td className={styles.tableValues} id={styles.tableMonthPayment}>{results.monthlyPayment?.toLocaleString()} Kč</td>
-                        </tr>
-                        <tr>
-                            <td>Roční úroková sazba:</td>
-                            <td className={styles.tableValues}>{results.yearlyInterest?.toFixed(1)} %</td>
-                        </tr>
-                        <tr>
-                            <td>RPSN:</td>
-                            <td className={styles.tableValues}>{results.RPSN?.toFixed(1)} %</td>
-                        </tr>
-                        <tr>
-                            <td>Celková splatná částka:</td>
-                            <td className={styles.tableValues}>{results.overallAmount?.toLocaleString()} Kč</td>
-                        </tr>
-                        {amountSliderValue > 200000 ? (
+                                    {monthsSliderValue === minMonths ?
+                                        (<div
+                                            className={styles.loanPeriod}>{periods?.months} {periods?.msgMonths}</div>) :
+                                        monthsSliderValue % 12 === 0 ?
+                                            (<div
+                                                className={styles.loanPeriod}>{periods?.years} {periods?.msgYears}</div>) :
+                                            (<div className={styles.loanPeriod}>
+                                                {periods?.years || ''} {periods?.msgYears} {periods?.months} {periods?.msgMonths}
+                                            </div>)}
+
+                                </Row>
+                                <Form.Range
+                                    className={styles.slider}
+                                    min={minMonths}
+                                    max={maxMonths}
+                                    value={monthsSliderValue}
+                                    onChange={(e) => {
+                                        setMonthsSliderValue(Number(e.target.value));
+                                        calculatePeriod((Number(e.target.value)));
+                                        // setLoanData(false)
+                                    }}
+                                    style={{'cursor': "green"}}/>
+                                <Container className={styles.loanPeriodRange}>
+                                    <Row>
+                                        <Col className={styles.minPeriod}>{minMonths} měsíců</Col>
+                                        <Col className={styles.maxPeriod}>{maxMonths / 12} let</Col>
+                                    </Row>
+                                </Container>
+                            </Form.Group>
+                        </Row>
+                    </Container>
+                </Col>
+
+                <Col md={4}>
+                    <Container className={styles.loanInfoBox}>
+                        <table>
+                            <tbody>
+                            <tr className={styles.tableRow1}>
+                                <td>Měsíční částka:</td>
+                                <td className={styles.tableValues}
+                                    id={styles.tableMonthPayment}>{results.monthlyPayment?.toLocaleString()} Kč
+                                </td>
+                            </tr>
                             <tr>
-                                <td>Fixní poplatek:</td>
-                                <td className={styles.tableValues}>{results.fixedFee?.toLocaleString()} Kč</td>
-                            </tr>) : (<tr className={styles.tableFixedFee}><td> </td><td> </td></tr>)}
-                        </tbody>
+                                <td>Roční úroková sazba:</td>
+                                <td className={styles.tableValues}>{results.yearlyInterest?.toFixed(1)} %</td>
+                            </tr>
+                            <tr>
+                                <td>RPSN:</td>
+                                <td className={styles.tableValues}>{results.RPSN?.toFixed(1)} %</td>
+                            </tr>
+                            <tr>
+                                <td>Celková splatná částka:</td>
+                                <td className={styles.tableValues}>{results.overallAmount?.toLocaleString()} Kč</td>
+                            </tr>
+                            {amountSliderValue > 200000 ? (
+                                <tr>
+                                    <td>Fixní poplatek:</td>
+                                    <td className={styles.tableValues}>{results.fixedFee?.toLocaleString()} Kč</td>
+                                </tr>) : (<tr>
+                                <td> &nbsp; </td>
+                                <td className={styles.tableValues}> &nbsp; </td>
+                            </tr>)}
+                            </tbody>
 
-                    </table>
-                    <div className={styles.buttonSection}>
-                    <button className={styles.btnApply}
-                            onClick={()=>{setLoanData(!loanData)
-                                console.log(formRef.current);
-                            }
-                    }>
-                        Chci zažádat o půjčku
-                    </button>
-          </div>
-                </Container>
-            </Col>
-        </Row>
-
-            <div ref={formRef}>
-            {loanData === true &&
-                <PersonalDataForm
-                amount={amountSliderValue}
-                numOfMonths={monthsSliderValue}/>
-            }
+                        </table>
+                        <div className={styles.buttonSection}>
+                            <button className={styles.btnApply}
+                                    onClick={() => {
+                                        setLoanData(true)
+                                        window.location.hash = ''
+                                        window.location.hash = 'infoLoan'
+                                    }
+                                    }>
+                                Chci zažádat o půjčku
+                            </button>
+                        </div>
+                    </Container>
+                </Col>
+            </Row>
+            <div ref={formRef} id={'infoLoan'}>
+                {loanData === true &&
+                    <PersonalDataForm
+                        amount={amountSliderValue}
+                        numOfMonths={monthsSliderValue}
+                    />
+                }
             </div>
-
         </div>
-
-
     )
 }
-
 
 export default Calculator;

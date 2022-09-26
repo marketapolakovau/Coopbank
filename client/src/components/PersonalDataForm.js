@@ -25,7 +25,7 @@ function PersonalDataForm(props) {
   };
 
   return (
-    <div>
+    <div >
       <div className="formMain">
         <div className="container maxWidth">
           <div>
