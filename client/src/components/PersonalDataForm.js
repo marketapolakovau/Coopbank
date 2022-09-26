@@ -30,7 +30,7 @@ function PersonalDataForm(props) {
         <div className="container maxWidth">
           <div>
             <h1 className="text-center mt-4 mb-4 headingPrimary">
-              Osobní udaje
+              Osobní údaje
             </h1>
             <Row>
               <Col>

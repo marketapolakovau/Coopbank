@@ -181,7 +181,9 @@ function IndividualForm(props) {
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
+
                 Zadejte e-mail ve validním formátu
+
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
