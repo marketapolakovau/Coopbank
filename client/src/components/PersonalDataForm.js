@@ -39,14 +39,16 @@ function PersonalDataForm(props) {
                 </h2>
               </Col>
               <Col>
-                <Form.Select
-                  className="text-center formSelect borderRadius"
-                  onChange={(e) => setApplicantType(e.target.value)}
-                >
-                  <option value="Fyzická osoba">Fyzická osoba</option>
-                  <option value="Podnikatel">Podnikatel</option>
-                  <option value="Právnická osoba">Právnická osoba</option>
-                </Form.Select>
+                <div className="formSelectContainer">
+                  <Form.Select
+                    className="text-center formSelect borderRadius"
+                    onChange={(e) => setApplicantType(e.target.value)}
+                  >
+                    <option value="Fyzická osoba">Fyzická osoba</option>
+                    <option value="Podnikatel">Podnikatel</option>
+                    <option value="Právnická osoba">Právnická osoba</option>
+                  </Form.Select>
+                </div>
               </Col>
             </Row>
           </div>

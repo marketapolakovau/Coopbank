@@ -2,6 +2,7 @@ import React from "react";
 
 function CompanyPositionMap() {
   const positions = [
+    "jednatel",
     "členka představenstva",
     "členka správní rady",
     "členka výboru",
@@ -12,7 +13,6 @@ function CompanyPositionMap() {
     "ekonomka",
     "generální ředitel",
     "generální ředitelka",
-    "jednatel",
     "jednatelka",
     "místopředseda",
     "místopředsedkyně",

@@ -45,10 +45,6 @@ function IndividualForm(props) {
 
   const handleShowModal = () => setShowModal(true);
 
-  // const psc = "170 00";
-  // const fixedPsc = psc.replace(/\s/g, "");
-  // console.log(fixedPsc);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -100,7 +96,7 @@ function IndividualForm(props) {
         <Row className="g-3 mb-3">
           <Col>
             <Form.Group>
-              <Form.Label controlId="name">Jméno</Form.Label>
+              <Form.Label>Jméno</Form.Label>
               <Form.Control
                 type="text"
                 name="name"
@@ -116,7 +112,7 @@ function IndividualForm(props) {
           </Col>
           <Col>
             <Form.Group>
-              <Form.Label controlId="surname">Příjmení</Form.Label>
+              <Form.Label>Příjmení</Form.Label>
               <Form.Control
                 type="text"
                 name="surname"
@@ -134,9 +130,7 @@ function IndividualForm(props) {
         <Row className="g-3 mb-3">
           <Col>
             <Form.Group>
-              <Form.Label controlId="nationality">
-                Státní příslušnost
-              </Form.Label>
+              <Form.Label>Státní příslušnost</Form.Label>
               <Form.Control
                 type="text"
                 name="nationality"
@@ -152,7 +146,7 @@ function IndividualForm(props) {
           </Col>
           <Col>
             <Form.Group>
-              <Form.Label controlId="birthNum">Rodní číslo</Form.Label>
+              <Form.Label>Rodní číslo</Form.Label>
               <Form.Control
                 type="text"
                 name="birthNum"
@@ -171,7 +165,7 @@ function IndividualForm(props) {
         <Row className="g-3 mb-3">
           <Col>
             <Form.Group>
-              <Form.Label controlId="email">E-mail</Form.Label>
+              <Form.Label>E-mail</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
@@ -181,15 +175,13 @@ function IndividualForm(props) {
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
-
                 Zadejte e-mail ve validním formátu
-
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col>
             <Form.Group>
-              <Form.Label controlId="phoneNum">Telefon</Form.Label>
+              <Form.Label>Telefon</Form.Label>
               <InputGroup>
                 <Form.Select
                   className="borderRadius"
@@ -218,7 +210,7 @@ function IndividualForm(props) {
         <Row className="mb-3 g-3">
           <Col xs={6}>
             <Form.Group>
-              <Form.Label controlId="street">Ulice</Form.Label>
+              <Form.Label>Ulice</Form.Label>
               <Form.Control
                 type="text"
                 name="street"
@@ -234,7 +226,7 @@ function IndividualForm(props) {
           </Col>
           <Col>
             <Form.Group>
-              <Form.Label controlId="descNumber">Číslo popisné</Form.Label>
+              <Form.Label>Číslo popisné</Form.Label>
               <Form.Control
                 type="text"
                 pattern="^\d[0-9a-zA-Z]*$"
@@ -251,9 +243,7 @@ function IndividualForm(props) {
           </Col>
           <Col>
             <Form.Group>
-              <Form.Label controlId="indicativeNumber">
-                Číslo orientační
-              </Form.Label>
+              <Form.Label>Číslo orientační</Form.Label>
               <Form.Control
                 type="text"
                 pattern="^\d[0-9a-zA-Z]*$"
@@ -272,7 +262,7 @@ function IndividualForm(props) {
         <Row className="g-3 mb-3">
           <Col>
             <Form.Group>
-              <Form.Label controlId="city">Obec</Form.Label>
+              <Form.Label>Obec</Form.Label>
               <Form.Control
                 type="text"
                 name="city"
@@ -288,7 +278,7 @@ function IndividualForm(props) {
           </Col>
           <Col>
             <Form.Group>
-              <Form.Label controlId="postalCode">PSČ</Form.Label>
+              <Form.Label>PSČ</Form.Label>
               <Form.Control
                 type="text"
                 pattern="\d{3}[ ]?\d{2}"

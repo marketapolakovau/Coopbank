@@ -33,7 +33,7 @@ function LegalEntityForm(props) {
   });
   const [prefixData, setPrefixData] = useState("+420");
   const [phoneNumData, setPhoneNumData] = useState("");
-  const [positionName, setPositionName] = useState("členka představenstva");
+  const [positionName, setPositionName] = useState("jednatel");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,6 +61,7 @@ function LegalEntityForm(props) {
 
     result.amount = props.amount;
     result.numOfMonths = props.numOfMonths;
+    result.position = positionName;
     result.address.descNumber = +result.address.descNumber;
     result.address.indicativeNumber = +result.address.indicativeNumber;
     // result.address.postalCode = result.address.postalCode.replace(/\s/g, "");
@@ -95,13 +96,14 @@ function LegalEntityForm(props) {
         id={"form"}
         onSubmit={(e) => handleSubmit(e)}
       >
-        <Row className="g-2 mb-3">
+        <Row className="g-3 mb-3">
           <Col>
             <Form.Group>
-              <Form.Label controlId="companyName">Název firmy</Form.Label>
+              <Form.Label>Název firmy</Form.Label>
               <Form.Control
                 type="text"
                 name="companyName"
+                className="borderRadius"
                 value={legalEntityFormData.companyName}
                 required
                 onChange={handleChange}
@@ -112,15 +114,21 @@ function LegalEntityForm(props) {
             </Form.Group>
           </Col>
           <Col>
-            <Form.Select onChange={(e) => setPositionName(e.target.value)}>
-              <CompanyPositionMap />
-            </Form.Select>
+            <Form.Group>
+              <Form.Label>Pozice</Form.Label>
+              <Form.Select
+                className="borderRadius"
+                onChange={(e) => setPositionName(e.target.value)}
+              >
+                <CompanyPositionMap />
+              </Form.Select>
+            </Form.Group>
           </Col>
         </Row>
         <Row className="g-3 mb-3">
           <Col>
             <Form.Group>
-              <Form.Label controlId="name">Jméno</Form.Label>
+              <Form.Label>Jméno</Form.Label>
               <Form.Control
                 type="text"
                 name="name"
@@ -136,7 +144,7 @@ function LegalEntityForm(props) {
           </Col>
           <Col>
             <Form.Group>
-              <Form.Label controlId="surname">Příjmení</Form.Label>
+              <Form.Label>Příjmení</Form.Label>
               <Form.Control
                 type="text"
                 name="surname"
@@ -154,9 +162,7 @@ function LegalEntityForm(props) {
         <Row className="g-3 mb-3">
           <Col>
             <Form.Group>
-              <Form.Label controlId="nationality">
-                Státní příslušnost
-              </Form.Label>
+              <Form.Label>Státní příslušnost</Form.Label>
               <Form.Control
                 type="text"
                 name="nationality"
@@ -172,7 +178,7 @@ function LegalEntityForm(props) {
           </Col>
           <Col>
             <Form.Group>
-              <Form.Label controlId="IC">IČO</Form.Label>
+              <Form.Label>IČO</Form.Label>
               <Form.Control
                 type="text"
                 name="IC"
@@ -191,7 +197,7 @@ function LegalEntityForm(props) {
         <Row className="g-3 mb-3">
           <Col>
             <Form.Group>
-              <Form.Label controlId="email">E-mail</Form.Label>
+              <Form.Label>E-mail</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
@@ -207,7 +213,7 @@ function LegalEntityForm(props) {
           </Col>
           <Col>
             <Form.Group>
-              <Form.Label controlId="phoneNum">Telefon</Form.Label>
+              <Form.Label>Telefon</Form.Label>
               <InputGroup>
                 <Form.Select
                   className="borderRadius"
@@ -236,7 +242,7 @@ function LegalEntityForm(props) {
         <Row className="mb-3 g-3">
           <Col xs={6}>
             <Form.Group>
-              <Form.Label controlId="street">Ulice</Form.Label>
+              <Form.Label>Ulice</Form.Label>
               <Form.Control
                 type="text"
                 name="street"
@@ -252,7 +258,7 @@ function LegalEntityForm(props) {
           </Col>
           <Col>
             <Form.Group>
-              <Form.Label controlId="descNumber">Číslo popisné</Form.Label>
+              <Form.Label>Číslo popisné</Form.Label>
               <Form.Control
                 type="text"
                 pattern="^\d[0-9a-zA-Z]*$"
@@ -269,9 +275,7 @@ function LegalEntityForm(props) {
           </Col>
           <Col>
             <Form.Group>
-              <Form.Label controlId="indicativeNumber">
-                Číslo orientační
-              </Form.Label>
+              <Form.Label>Číslo orientační</Form.Label>
               <Form.Control
                 type="text"
                 pattern="^\d[0-9a-zA-Z]*$"
@@ -290,7 +294,7 @@ function LegalEntityForm(props) {
         <Row className="g-3 mb-3">
           <Col>
             <Form.Group>
-              <Form.Label controlId="city">Obec</Form.Label>
+              <Form.Label>Obec</Form.Label>
               <Form.Control
                 type="text"
                 name="city"
@@ -306,7 +310,7 @@ function LegalEntityForm(props) {
           </Col>
           <Col>
             <Form.Group>
-              <Form.Label controlId="postalCode">PSČ</Form.Label>
+              <Form.Label>PSČ</Form.Label>
               <Form.Control
                 type="text"
                 pattern="\d{3}[ ]?\d{2}"
