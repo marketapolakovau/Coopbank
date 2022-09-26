@@ -6,11 +6,9 @@ import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button } from "react-bootstrap";
 import UserContext from "./context/UserProvider";
 import { mdiCalculator } from "@mdi/js";
 import Icon from "@mdi/react";
-import Cookies from "universal-cookie";
 
 function App() {
   const { isLogedIn, logOut } = useContext(UserContext);

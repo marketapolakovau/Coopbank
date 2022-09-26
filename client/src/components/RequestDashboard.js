@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import { Table, Form, Row, Col, Container, InputGroup } from "react-bootstrap";
+import { Table, Container } from "react-bootstrap";
 import Icon from "@mdi/react";
 import {
   mdiArrowDownDropCircleOutline,
@@ -38,7 +38,7 @@ function RequestDashboard() {
       .catch((err) => {
         setStatus("error");
       });
-  }, []);
+  }, [user.token]);
 
   const sortDataAsc = () => {
     const copy = [...data];

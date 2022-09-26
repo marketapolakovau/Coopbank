@@ -36,10 +36,7 @@ export function UserProvider({ children }) {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch((e) => console.log(e));
+    });
   };
 
   const deleteRequest = (id) => {
@@ -57,10 +54,7 @@ export function UserProvider({ children }) {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch((e) => console.log(e));
+    });
   };
   const value = {
     loginUser,

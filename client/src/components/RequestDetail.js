@@ -50,7 +50,7 @@ function RequestDetail() {
       .catch((err) => {
         setStatus("error");
       });
-  }, [render]);
+  }, [render, id]);
 
   //fetch data to get data from calculator
   useEffect(() => {

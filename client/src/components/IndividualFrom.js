@@ -61,7 +61,7 @@ function IndividualForm(props) {
     result.numOfMonths = props.numOfMonths;
     result.address.descNumber = +result.address.descNumber;
     result.address.indicativeNumber = +result.address.indicativeNumber;
-    // result.address.postalCode = result.address.postalCode.replace(/\s/g, "");
+    result.address.postalCode = result.address.postalCode.replace(/\s/g, "");
     result.address.postalCode = +result.address.postalCode;
     result.phone = prefixData + phoneNumData;
 
