@@ -9,6 +9,7 @@ import "../css/request-detail.css";
 import DeleteModal from "./DeleteModal";
 import Cookies from "universal-cookie";
 import Loading from "./Loading";
+import ServerError from "./ServerError";
 
 function RequestDetail() {
   const [request, setRequest] = useState();
@@ -19,7 +20,6 @@ function RequestDetail() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [status, setStatus] = useState("pending");
   const cookies = new Cookies();
-  console.log(cookies.get(`requestCount${request?.id}`));
   let phone = request?.phone.slice(4).toLocaleString();
   phone = +phone;
   let prefix = request?.phone.slice(0, 4).toLocaleString();
@@ -29,20 +29,30 @@ function RequestDetail() {
     numOfMonthsE: request?.numOfMonths,
   });
   const [showEdit, setShowEdit] = useState(false);
-  const [error, setError] = useState();
   const { id } = useParams();
-  const { approveRequest, deleteRequest, cancelRequest, isLogedIn, user } =
+  const { approveRequest, cancelRequest, isLogedIn, user } =
     useContext(UserContext);
 
+  //fetch data to get personal info about client
   useEffect(() => {
     fetch(`http://localhost:8000/request/${id}`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status > 399) {
+          return Promise.reject(res.status);
+        } else {
+          return res.json();
+        }
+      })
       .then((data) => {
+        setStatus("success");
         setRequest(data);
-        console.log(data);
+      })
+      .catch((err) => {
+        setStatus("error");
       });
   }, [render]);
 
+  //fetch data to get data from calculator
   useEffect(() => {
     fetch("http://localhost:8000/request/calculate", {
       method: "POST",
@@ -56,8 +66,7 @@ function RequestDetail() {
     })
       .then((res) => {
         if (res.status > 399) {
-          setStatus("error");
-          Promise.reject("error");
+          Promise.reject(res.status);
         } else {
           return res.json();
         }
@@ -70,15 +79,14 @@ function RequestDetail() {
         setStatus("error");
       });
   }, [request]);
-  console.log(String(request?.phone.slice(4, 13)));
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEdit({ ...edit, [name]: value });
   };
 
+  //fetch data to update client detail request
   const editRequest = () => {
-    console.log(+edit.amountE);
     fetch(`http://localhost:8000/request/${request.id}`, {
       method: "PUT",
       headers: {
@@ -91,7 +99,7 @@ function RequestDetail() {
     })
       .then((res) => {
         if (res.status > 399) {
-          Promise.reject("error");
+          return Promise.reject(res.status);
         } else {
           return res.json();
         }
@@ -108,7 +116,11 @@ function RequestDetail() {
   if (status === "pending") {
     return <Loading />;
   } else if (status === "error") {
-    return <div className="container">error</div>;
+    return (
+      <div className="container">
+        <ServerError />
+      </div>
+    );
   } else {
     return (
       <div className="requestDetail-container">
@@ -238,27 +250,6 @@ function RequestDetail() {
                 <Col>Výše úvěru</Col>
 
                 {showEdit ? (
-                  // <Col>
-                  //   <span
-                  //     contentEditable
-                  //     onInput={(e) => {
-                  //       const tmpAmount = +e.target.textContent.replace(
-                  //         /\s/g,
-                  //         ""
-                  //       );
-
-                  //       if (tmpAmount > 1200000 || tmpAmount < 5000) {
-                  //         setValidated(!validated);
-                  //       } else {
-                  //         handleEditChange(e, "amountE");
-                  //         setValidated(false);
-                  //       }
-                  //     }}
-                  //   >
-                  //     {request?.amount?.toLocaleString()}
-                  //   </span>{" "}
-                  //   Kč
-                  // </Col>
                   <Col>
                     <input
                       className="request-input"
@@ -324,21 +315,6 @@ function RequestDetail() {
                     měsíců
                   </Col>
                 ) : (
-                  //   <Col>
-                  //     <input
-                  //       className="input"
-                  //       name="numOfMonthsE"
-                  //       value={edit.numOfMonthsE}
-                  //       defaultValue={request?.numOfMonths}
-                  //       type="number"
-                  //       onChange={handleEditChange}
-                  //       min={5}
-                  //       max={60}
-                  //     />
-                  //     <Form.Control.Feedback type="invalid">
-                  //       Doba splácení může být od 5 do 60 měsíců
-                  //     </Form.Control.Feedback>
-                  //   </Col>
                   <Col>{request?.numOfMonths} měsíců</Col>
                 )}
               </Row>
@@ -394,8 +370,8 @@ function RequestDetail() {
             </div>
           </Col>
         </Row>
-
-        {isLogedIn() ? (
+        {/* If request is not approved than admin can refuse or accept the request */}
+        {isLogedIn() && request?.status !== "APPROVED" ? (
           <div>
             <button
               className="primary-button"
@@ -412,6 +388,7 @@ function RequestDetail() {
               onClick={() => {
                 cancelRequest(request.id);
                 setRender(!render);
+                //setting cookies so request can be refused only 3 times
                 cookies.set(
                   `requestCount${request?.id}`,
                   +cookies.get(`requestCount${request?.id}`)
