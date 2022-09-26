@@ -15,7 +15,7 @@ function Calculator() {
 
     const [results, setResults] = useState({})
 
-    const [loanData, setLoanData] = useState()
+    const [loanData, setLoanData] = useState(false)
 
     useEffect(() => {
         async function calculate() {
@@ -94,6 +94,7 @@ function Calculator() {
 
 
     return (
+        <div>
         <Row className={styles.calc} xs={1} md={2}>
             <Col md={8}>
                 <Container className={styles.slidersContainer}>
@@ -109,7 +110,9 @@ function Calculator() {
                                 max={maxAmount}
                                 step={amountSliderValue <= 50000 ? 1000 : 5000}
                                 value={amountSliderValue}
-                                onChange={e => setAmountSliderValue(Number(e.target.value))}/>
+                                onChange={e => {setAmountSliderValue(Number(e.target.value))
+                                    setLoanData(false)
+                                }}/>
                             <Container className={styles.loanAmountRange}>
                                 <Row>
                                     <Col className={styles.minAmount}>{minAmount.toLocaleString()} Kč</Col>
@@ -183,14 +186,10 @@ function Calculator() {
 
                     </table>
                     <div className={styles.buttonSection}>
-                    <button className={styles.btnApply}>
+                    <button className={styles.btnApply}
+                            onClick={()=>{setLoanData(!loanData)}}>
                         Chci zažádat o půjčku
                     </button>
-
-                        <PersonalDataForm
-                            amount={payload.amount}
-                            numOfMonths={payload.numOfMonths}
-                        />
 
 
 
@@ -198,6 +197,16 @@ function Calculator() {
                 </Container>
             </Col>
         </Row>
+
+            {loanData === true &&
+                <PersonalDataForm
+                amount={results.amount}
+                numOfMonths={results.numOfMonths}
+            />}
+
+
+        </div>
+
 
     )
 }
