@@ -6,7 +6,7 @@ import { Row, Col } from "react-bootstrap";
 function Home() {
   return (
     <div className="home-container">
-      <Row>
+      <Row xs={1} md={2}>
         <Col className="home-main-text-container">
           <h1 className="white-text home-heading">Půjčíme vám na cokoliv</h1>
           <p className="white-text home-paragraph">
@@ -15,7 +15,7 @@ function Home() {
           </p>
           <Link to="/calculator">
             <button className="white-button home-button">
-              <p className="button-text">Spočítat splátky</p>{" "}
+              <p className="button-text-home">Spočítat splátky</p>{" "}
             </button>
           </Link>
         </Col>

@@ -5,6 +5,7 @@
 }
 .home-main-text-container {
   padding-top: 30px;
+  margin-bottom: 30px;
 }
 
 .white-text {
@@ -29,6 +30,6 @@
   padding: 1rem 1.5rem 0rem 1.5rem;
 }
 
-.button-text {
+.button-text-home {
   font-weight: 700;
 }

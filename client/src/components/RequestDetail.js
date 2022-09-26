@@ -1,17 +1,26 @@
 import { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { Card, Row, Col } from "react-bootstrap";
+
+import { Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Icon from "@mdi/react";
 import { mdiDeleteOutline } from "@mdi/js";
 import UserContext from "../context/UserProvider";
 import "../css/request-detail.css";
+import DeleteModal from "./DeleteModal";
 
 function RequestDetail() {
-  const navigate = useNavigate();
   const [request, setRequest] = useState();
   const [calculateData, setCalculateData] = useState();
   const [render, setRender] = useState(false);
+  const [validated, setValidated] = useState(false);
+  const [validatedMonth, setValidatedMonth] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [edit, setEdit] = useState({
+    amountE: request?.amount,
+    numOfMonthsE: request?.numOfMonths,
+  });
+  const [showEdit, setShowEdit] = useState(false);
+  const [error, setError] = useState();
   const { id } = useParams();
   const { approveRequest, deleteRequest, cancelRequest, isLogedIn, user } =
     useContext(UserContext);
@@ -43,6 +52,42 @@ function RequestDetail() {
         console.log(data);
       });
   }, [request]);
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEdit({ ...edit, [name]: value });
+  };
+
+  const editRequest = () => {
+    console.log(+edit.amountE);
+    fetch(`http://localhost:8000/request/${request.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        amount: +edit.amountE || +request.amount,
+        numOfMonths: +edit.numOfMonthsE || +request.numOfMonths,
+      }),
+    })
+      .then((res) => {
+        if (res.status > 399) {
+          Promise.reject();
+        } else {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        console.log(data);
+        setShowEdit(false);
+        setTimeout(() => setRender(!render), 500);
+      })
+      .catch((e) => {
+        console.log(e);
+        setError("Chyba při úpravě žádosti");
+      });
+  };
+
   return (
     <div className="requestDetail-container">
       <Row>
@@ -54,8 +99,7 @@ function RequestDetail() {
             <button
               className="danger-button delete"
               onClick={() => {
-                deleteRequest(request.id);
-                navigate("/admin");
+                setShowDeleteModal(!showDeleteModal);
               }}
             >
               <Icon size={1} path={mdiDeleteOutline} />
@@ -69,8 +113,8 @@ function RequestDetail() {
           <p className="greenText">Údaje o žadateli</p>
           <div className="requestDetail-row">
             <Row className="row">
-              <Col>Typ žadatele</Col>
-              <Col>
+              <Col xs={1}>Typ žadatele</Col>
+              <Col xs={1}>
                 {request?.applicantType === "INDIVIDUAL" && "Fyzická osoba"}
                 {request?.applicantType === "OSVC" && "Podnikatel"}
                 {request?.applicantType === "LEGAL_ENTITY" && "Právnická osoba"}
@@ -159,22 +203,127 @@ function RequestDetail() {
         </Col>
         <Col>
           <p className="greenText">Půjčka</p>
-          <div className="requestDetail-row">
+
+          <div
+            className={showEdit ? "requestDetail-edit" : "requestDetail-row"}
+          >
             <Row>
               <Col>Výše úvěru</Col>
-              <Col>{request?.amount?.toLocaleString()} CZK</Col>
+
+              {showEdit ? (
+                // <Col>
+                //   <span
+                //     contentEditable
+                //     onInput={(e) => {
+                //       const tmpAmount = +e.target.textContent.replace(
+                //         /\s/g,
+                //         ""
+                //       );
+
+                //       if (tmpAmount > 1200000 || tmpAmount < 5000) {
+                //         setValidated(!validated);
+                //       } else {
+                //         handleEditChange(e, "amountE");
+                //         setValidated(false);
+                //       }
+                //     }}
+                //   >
+                //     {request?.amount?.toLocaleString()}
+                //   </span>{" "}
+                //   Kč
+                // </Col>
+                <Col>
+                  <input
+                    className="request-input"
+                    type="number"
+                    value={edit.amountE}
+                    defaultValue={request?.amount}
+                    name="amountE"
+                    step={1000}
+                    min={5000}
+                    max={1200000}
+                    onChange={(e) => {
+                      const tmpAmount = +e.target.value.replace(/\s/g, "");
+
+                      if (tmpAmount > 1200000 || tmpAmount < 5000) {
+                        setValidated(!validated);
+                        handleEditChange(e);
+                      } else {
+                        handleEditChange(e);
+                        setValidated(false);
+                      }
+                    }}
+                  />{" "}
+                  Kč
+                </Col>
+              ) : (
+                <Col>{request?.amount?.toLocaleString()} Kč</Col>
+              )}
             </Row>
+            <div style={{ color: "red", fontSize: "0.8rem" }}>
+              {validated &&
+                "Zadaná částka nesmí být nižší než 5 000 a vyšší než 1 200 000 Kč"}
+            </div>
           </div>
-          <div className="requestDetail-row">
+
+          <div
+            className={showEdit ? "requestDetail-edit" : "requestDetail-row"}
+          >
             <Row>
               <Col>Doba splácení</Col>
-              <Col>{request?.numOfMonths} měsíců</Col>
+
+              {showEdit ? (
+                <Col>
+                  <input
+                    className="request-input"
+                    type="number"
+                    value={edit.numOfMonthsE}
+                    defaultValue={request?.numOfMonths}
+                    name="numOfMonthsE"
+                    min={5}
+                    max={60}
+                    onChange={(e) => {
+                      const tmpAmount = +e.target.value.replace(/\s/g, "");
+
+                      if (tmpAmount < 5 || tmpAmount > 60) {
+                        setValidatedMonth(!validatedMonth);
+                        handleEditChange(e);
+                      } else {
+                        handleEditChange(e);
+                        setValidatedMonth(false);
+                      }
+                    }}
+                  />{" "}
+                  měsíců
+                </Col>
+              ) : (
+                //   <Col>
+                //     <input
+                //       className="input"
+                //       name="numOfMonthsE"
+                //       value={edit.numOfMonthsE}
+                //       defaultValue={request?.numOfMonths}
+                //       type="number"
+                //       onChange={handleEditChange}
+                //       min={5}
+                //       max={60}
+                //     />
+                //     <Form.Control.Feedback type="invalid">
+                //       Doba splácení může být od 5 do 60 měsíců
+                //     </Form.Control.Feedback>
+                //   </Col>
+                <Col>{request?.numOfMonths} měsíců</Col>
+              )}
             </Row>
+            <div style={{ color: "red", fontSize: "0.8rem" }}>
+              {validatedMonth &&
+                "Počet měsíců nesmí být nižší než 5 a vyšší než 60"}
+            </div>
           </div>
           <div className="requestDetail-row">
             <Row>
               <Col>Měsíční splátka</Col>
-              <Col>{calculateData?.monthlyPayment?.toLocaleString()} CZK</Col>
+              <Col>{calculateData?.monthlyPayment?.toLocaleString()} Kč</Col>
             </Row>
           </div>
           <div className="requestDetail-row">
@@ -192,7 +341,7 @@ function RequestDetail() {
           <div className="requestDetail-row">
             <Row>
               <Col>Celková částka</Col>
-              <Col>{calculateData?.overallAmount?.toLocaleString()} CZK</Col>
+              <Col>{calculateData?.overallAmount?.toLocaleString()} Kč</Col>
             </Row>
           </div>
           <div className="requestDetail-row">
@@ -219,8 +368,8 @@ function RequestDetail() {
         </Col>
       </Row>
 
-      {isLogedIn() && (
-        <div className="button-container">
+      {isLogedIn() && request?.status === "PENDING" ? (
+        <div>
           <button
             className="primary-button"
             onClick={() => {
@@ -240,6 +389,36 @@ function RequestDetail() {
             Zamítnout
           </button>
         </div>
+      ) : (
+        !isLogedIn() &&
+        request?.status !== "APPROVED" && (
+          <button
+            className={showEdit ? "outline-dark-button" : "primary-button"}
+            onClick={() => {
+              setShowEdit(!showEdit);
+            }}
+          >
+            {showEdit ? "Zrušit úpravy" : "Upravit"}
+          </button>
+        )
+      )}
+      {showEdit && (
+        <button
+          disabled={validated || validatedMonth}
+          className="primary-button"
+          onClick={() => {
+            editRequest();
+          }}
+        >
+          Uložit změny
+        </button>
+      )}
+      {showDeleteModal === true && (
+        <DeleteModal
+          showDeleteModal={showDeleteModal}
+          setShowDeleteModal={setShowDeleteModal}
+          id={request.id}
+        />
       )}
     </div>
   );

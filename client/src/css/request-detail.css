@@ -2,15 +2,20 @@
   padding: 100px;
   background-color: #f0f0f0;
 }
-.button-container {
-  position: absolute;
-  right: 90px;
-}
-.requestDetail-row {
+
+.requestDetail-row,
+.requestDetail-edit {
   background-color: white;
   margin-bottom: 5px;
   padding: 1.2rem 1rem;
 }
+.requestDetail-edit {
+  border: 2px solid #00843d;
+}
+.request-input {
+  border: none;
+}
+
 @media only screen and (max-width: 600px) {
   .requestDetail-container {
     padding: 10px;
