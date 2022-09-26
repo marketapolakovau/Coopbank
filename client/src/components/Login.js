@@ -5,7 +5,6 @@ import WrongLogin from "./WrongLogin";
 import { Form, Row, Col, Button, InputGroup, Container } from "react-bootstrap";
 import Icon from "@mdi/react";
 import { mdiAccountOutline, mdiLockOpenOutline } from "@mdi/js";
-import "../css/login.css";
 
 function Login() {
   const [loginData, setLoginData] = useState({ username: "", password: "" });
@@ -28,38 +27,32 @@ function Login() {
           <Col>
             <Form.Label className="greyText">Uživatelské jméno</Form.Label>
 
-            <InputGroup className="mb-3" controlId="ControlInput1">
-              <InputGroup.Text
-                style={{ backgroundColor: "white", borderRight: "none" }}
-                id="basic-addon1"
-              >
+            <div className="input-container">
+              <i className="input-icon">
                 <Icon size={1} path={mdiAccountOutline} className="icon" />
-              </InputGroup.Text>
+              </i>
               <input
-                className="input-login"
+                className="input"
                 onChange={handleChange}
                 type="text"
                 name="username"
               />
-            </InputGroup>
+            </div>
           </Col>
           <Col>
             <Form.Label className="greyText">Heslo</Form.Label>
-            <InputGroup as={Col} className="mb-3" controlId="ControlInpu2">
-              <InputGroup.Text
-                style={{ backgroundColor: "white" }}
-                id="basic-addon1"
-              >
+            <div className="input-container">
+              <i className="input-icon">
                 <Icon size={1} path={mdiLockOpenOutline} className="icon" />
-              </InputGroup.Text>
+              </i>
 
               <input
-                className="input-login"
+                className="input"
                 onChange={handleChange}
                 type="password"
                 name="password"
               />
-            </InputGroup>
+            </div>
           </Col>
           <InputGroup>
             <button

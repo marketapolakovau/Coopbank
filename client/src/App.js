@@ -32,20 +32,45 @@ function App() {
             <Offcanvas.Body>
               <Nav className="justify-content-end flex-grow-1 pe-3">
                 {!isLogedIn() && (
-                  <Link className="navigation" to="/calculator">
-                    <Icon size={1} path={mdiCalculator} className="icon" />
-                    Kalkulačka
-                  </Link>
+                  <div>
+                    <Link
+                      className="navigation d-none
+                    d-md-block"
+                      to="/calculator"
+                    >
+                      <Icon size={1} path={mdiCalculator} className="icon" />
+                      Kalkulačka
+                    </Link>
+                    <Link
+                      className="button-text d-block
+                    d-md-none"
+                      to="/calculator"
+                    >
+                      <Icon size={1} path={mdiCalculator} className="icon" />
+                      Kalkulačka
+                    </Link>
+                  </div>
                 )}
               </Nav>
               {isLogedIn() && (
-                <button
-                  type="button"
-                  className="outline-white-button"
-                  onClick={logOut}
-                >
-                  Odhlásit se
-                </button>
+                <div>
+                  <button
+                    type="button"
+                    className="outline-white-button  d-none
+                    d-md-block"
+                    onClick={logOut}
+                  >
+                    Odhlásit se
+                  </button>
+                  <button
+                    type="button"
+                    className="button-text  d-block
+                    d-md-none"
+                    onClick={logOut}
+                  >
+                    Odhlásit se
+                  </button>
+                </div>
               )}
             </Offcanvas.Body>
           </Navbar.Offcanvas>

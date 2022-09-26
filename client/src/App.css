@@ -34,6 +34,7 @@
   text-decoration: none;
   color: rgb(208, 206, 206);
 }
+/* //butons */
 
 .outline-button {
   text-decoration: none;
@@ -115,8 +116,28 @@
   background-color: #00843d;
   color: white;
 }
+.button-text {
+  border: none;
+  color: #00843d;
+  background-color: white;
+}
 
+/* input */
+.input-container {
+  display: flex;
+  width: 100%;
+  margin-bottom: 15px;
+}
 .input {
-  width: 10rem;
-  border: 1px solid #ced4da;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dadada;
+}
+.input-icon {
+  padding: 10px;
+
+  border: 1px solid #dadada;
+  color: white;
+  min-width: 50px;
+  text-align: center;
 }

@@ -69,24 +69,18 @@ function RequestDashboard() {
   return (
     <>
       <Container className="container">
-        <Row xs={4}>
-          <Col>
-            <InputGroup className="mb-3">
-              <InputGroup.Text style={{ backgroundColor: "white" }}>
-                <Icon size={1} path={mdiFilterOutline} />
-              </InputGroup.Text>
-              <Form.Select
-                onChange={handleChange}
-                aria-label="Default select example"
-              >
-                <option value="ALL">Vše</option>
-                <option value="INDIVIDUAL">Fyzická osoba</option>
-                <option value="OSVC">Podnikatel</option>
-                <option value="LEGAL_ENTITY">Právnická osoba</option>
-              </Form.Select>
-            </InputGroup>
-          </Col>
-        </Row>
+        <div className="input-container">
+          <i className="input-icon">
+            <Icon size={1} path={mdiFilterOutline} className="icon" />
+          </i>
+          <select onChange={handleChange} className="input">
+            <option value="ALL">Vše</option>
+            <option value="INDIVIDUAL">Fyzická osoba</option>
+            <option value="OSVC">Podnikatel</option>
+            <option value="LEGAL_ENTITY">Právnická osoba</option>
+          </select>
+        </div>
+
         <Table responsive>
           <thead className="thead">
             <tr>

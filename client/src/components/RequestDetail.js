@@ -113,8 +113,8 @@ function RequestDetail() {
           <p className="greenText">Údaje o žadateli</p>
           <div className="requestDetail-row">
             <Row className="row">
-              <Col>Typ žadatele</Col>
-              <Col>
+              <Col xs={1}>Typ žadatele</Col>
+              <Col xs={1}>
                 {request?.applicantType === "INDIVIDUAL" && "Fyzická osoba"}
                 {request?.applicantType === "OSVC" && "Podnikatel"}
                 {request?.applicantType === "LEGAL_ENTITY" && "Právnická osoba"}
