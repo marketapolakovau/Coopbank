@@ -4,6 +4,7 @@
 
 .headingPrimary {
   padding-top: 32px;
+  padding-bottom: 16px;
   color: #fff;
 }
 
@@ -15,8 +16,13 @@
   max-width: 720px;
 }
 
+.formSelectContainer {
+  display: flex;
+  justify-content: center;
+}
+
 .formSelect {
-  max-width: 300px;
+  max-width: 250px;
 }
 
 .marginTop {
