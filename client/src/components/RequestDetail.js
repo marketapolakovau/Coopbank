@@ -10,6 +10,7 @@ import DeleteModal from "./DeleteModal";
 import Cookies from "universal-cookie";
 import Loading from "./Loading";
 import ServerError from "./ServerError";
+import Error404 from "./Error404";
 
 function RequestDetail() {
   const [request, setRequest] = useState();
@@ -19,6 +20,7 @@ function RequestDetail() {
   const [validatedMonth, setValidatedMonth] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [status, setStatus] = useState("pending");
+  const [statusCode, setStatusCode] = useState();
   const cookies = new Cookies();
   let phone = request?.phone.slice(4).toLocaleString();
   phone = +phone;
@@ -38,6 +40,7 @@ function RequestDetail() {
     fetch(`http://localhost:8000/request/${id}`)
       .then((res) => {
         if (res.status > 399) {
+          setStatusCode(res.status);
           return Promise.reject(res.status);
         } else {
           return res.json();
@@ -115,6 +118,12 @@ function RequestDetail() {
   };
   if (status === "pending") {
     return <Loading />;
+  } else if (statusCode < 499) {
+    return (
+      <div className="container">
+        <Error404 />
+      </div>
+    );
   } else if (status === "error") {
     return (
       <div className="container">
